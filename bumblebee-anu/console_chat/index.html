@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Console Chat</title>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/scripts.js?"></script> 
+  <link href="css/styles.css?" rel="stylesheet">
+  
+</head>
+<body>
+    <div style="width:100%;text-align: center;font-size: 20px;">Click me <b style="color:red;font-size:65px">&DoubleUpArrow;</b><br>or press ctrl+`</div>
+    <div class="demo">
+        <h1>Console Chat</h1>
+        <p>Easy chat for your web site</p>
+        <p>For install you need:</p>
+        <ul>
+            <li>
+                Copy files in your project
+            </li>
+            <li>
+                Add two includes in you site header, after jquery<br/>
+                &lt;script type="text/javascript" src="/console_chat/js/scripts.js"&gt;&lt;/script&gt;<br/>
+                &lt;link href="/console_chat/css/styles.css" rel="stylesheet"&gt;
+            </li>
+            <li>
+                Make folders "cache" and "history" writable
+            </li>
+            <li>
+                Configurate options on chat.php (Admin password, history limit and set, using unique chat for all pages or not)
+            </li>
+            <li>
+                Configurate js in /js/scripts.js (Keys for open\close chat, default username, link for request new sessages and others)
+            </li>
+            <li>
+                Add in html:<br>
+&lt;script&gt;<br/>
+$(document).ready(function(){<br/>
+    consoleChat('username');// username not necessarily, default name Guest<br/>
+});<br/>
+&lt;/script&gt;<br/>
+            </li>
+            <li>
+                Open you web page and click Ctrl+` (or other keys, if you change) or click chat button ot top, if then enabled
+            </li>
+            
+            <li>
+                Enjoy
+            </li>
+        </ul> 
+        <h2>Commands</h2>
+        <pre>
+/help - watch this text
+/name - change name
+/admin - try to login as admin
+/ban - ban
+/banip - ban ip
+/unban - unabn ip or name
+/unbanall - Unban all names and ips
+/bannednames - show all banned names
+/bannedips - show all banned ips
+/w %username% %message% - send private message
+        </pre>
+For login as admin, try msg "/admin 123" (123 is default password, you can change it on chat.php)<br/>
+If you logined as admin, you can click on other usernames and ban it.<br/>
+Use command /unban %username% or /unbanall for set it free.
+    </div>
+    <div style="position: absolute;top: 600px;right: 500px;">
+        Change designs:<br/>
+        <a href="" style="color:black;" onclick="$('#chat').removeClass('white');$('#chat').removeClass('black');return false;">Green</a><br/>
+        <a href="" style="color:black;" onclick="$('#chat').addClass('black');return false;">Black</a><br/>
+        <a href="" style="color:black;" onclick="$('#chat').addClass('white');$('#chat').removeClass('black');return false;">White</a><br/>
+    </div>
+    <script>
+      $(function(){
+          $(window).load(function(){
+              consoleChat();
+          })
+      })
+  </script>
+</body>
+</html>

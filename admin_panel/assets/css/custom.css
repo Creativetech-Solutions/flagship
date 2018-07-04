@@ -1,0 +1,11 @@
+.select-config{float: left;margin-top: 7px;}
+.font22{font-size:22px;}
+.fl{float:left;}
+.bold{font-weight: bold}.select2-close-mask{
+    z-index: 2099;
+}
+.pad0{padding:0;}
+.select2-dropdown{
+    z-index: 3051;
+}
+.select2-container .select2-selection--single{height:34px;border-radius:0;}

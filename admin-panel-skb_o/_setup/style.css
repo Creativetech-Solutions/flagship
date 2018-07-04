@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'robotoregular';
+    src: url('../theme/fonts/roboto-regular.eot');
+    src: url('../theme/fonts/roboto-regular.eot?#iefix') format('embedded-opentype'),
+         url('../theme/fonts/roboto-regular.woff') format('woff'),
+         url('../theme/fonts/roboto-regular.ttf') format('truetype'),
+         url('../theme/fonts/roboto-regular.svg#robotoregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+body{font-family:robotoregular, Arial, Helvetica, sans-serif;font-size:13px;line-height:1.3em;background-color:#EDEDED;color:#555;margin:0;padding:0}
+div.field{font-size:12px;font-weight:700;margin-bottom:10px}
+form{margin:0;padding:0}
+a.no{text-decoration:none}
+table tr td{padding:5px 2px}
+.tr{background-color:#DEDEDE}
+img{border:none}
+.all{background-image:none;font-weight:700}
+input,textarea,select,.inputbox-sml{font-family:robotoregular, Arial, Helvetica, sans-serif;font-size:14px;border:3px solid #ccc;border-radius:5px;color:#666;padding:5px}
+input:focus,textarea:focus{border:3px solid #aaa;background-color:#fff;background-image:none}
+select{border:1px solid #ccc;border-radius:5px;-moz-border-radius:5px;padding:4px 8px}
+a:active{color:#000}
+p{margin:5px 0}
+button{ font-family: "robotoregular", Arial, Helvetica, sans-serif; border: 3px solid #CCC; width: 100px; height: 40px; cursor: pointer; color: #fff; background: #232323; font-size: 14px; }
+.btn button:hover{background-color: #000;}
+div#installation{ border: 3px solid #CCC; width: 800px; padding: 0px; margin-top: 20px; margin-right: auto; margin-bottom: 20px; margin-left: auto; background-color: #F4F4F4; box-shadow:0 1px 0 #FFF inset, 0 2px 4px rgba(0,0,0,0.08);}
+.logo{ background-image: url(img/logo.png); background-repeat: no-repeat; background-position: center center; height: 50px; background-color: #232323; padding: 10px; }
+.inner-content{ background-color: #FFF; border: 2px solid #CCC; border-radius: 3px; margin: 10px; padding: 10px }
+.lgn{text-align:right;margin:0 10px 10px 0}
+#copyright{line-height:16px;text-align:center;width:492px;margin:0 auto 10px}
+div.error{border:1px solid #CD5C52;color:#CD5C52;font-size:11px;font-weight:700;line-height:20px;background-color:#FFEDEB;background-image:url(img/ico-err.gif);background-repeat:no-repeat;background-position:left;margin:0 10px;padding:10px 10px 10px 53px}
+.err{color:#C00;display:none;font-size:10px;line-height:16px;white-space:nowrap;width:16px;background-image:url(img/off.gif);background-repeat:no-repeat;padding:0 0 0 20px}
+h2#install{font-size:20px;line-height:50px;background-image:url(img/install.png);background-repeat:no-repeat;background-position:10px;font-weight:lighter;padding:0 0 0 65px}
+h3{ font-size: 12px; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #CCC; margin: 5px 0; padding: 2px; text-transform: uppercase; }
+span.no{color:red;font-weight:700}
+span.yes{color:#067900;font-weight:700}
+td.elem{font-weight:700;vertical-align:top;width:150px}
+.license{background-color:#FFF;border:1px solid #ABABAB;height:400px;width:775px;margin:0 10px 10px}
+td.item-desc{vertical-align:top;width:250px;padding-right:20px}
+div.query{border:1px dotted #222;color:#777;font-size:10px;margin:0 0 10px}
+div.qerror{color:red;font-size:10px;margin:0 0 5px}
+div.db_errors{border:1px solid #777;height:300px;overflow:scroll;width:300px;margin:10px 0 0;padding:5px}
+div.remove_install{background-color:#FFEDEB;border:1px dotted #CD5C52;color:#CD5C52;font-weight:700;text-align:center;padding:5px 0}
+a:link,a:visited{color:#0240a3}
