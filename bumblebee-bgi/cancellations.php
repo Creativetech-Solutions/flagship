@@ -155,7 +155,11 @@ $reservations = mysql_query($query);
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $row[28] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $row[27] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $row[27] . "'"));
-                                                $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_touroperator WHERE id='" . $row[5] . "'"));
+                                                if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){
+                                                    $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_fsft_touroperator WHERE id='" . $row[5] . "'"));
+                                                } else {
+                                                    $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_touroperator WHERE id='" . $row[5] . "'"));
+                                                }
                                                 $rep_type = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reptype WHERE id='" . $row[24] . "'"));
                                                 $flight_class = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WHERE id='" . $row[17] . "'"));
                                                 $rep_name = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reps WHERE id_rep='" . $row[42] . "'"));
@@ -163,8 +167,8 @@ $reservations = mysql_query($query);
                                                 $arr_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $row[19] . "'"));
                                                 $dep_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $row[30] . "'"));
 
-                                                $arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $row[20] . "'"));
-                                                $dep_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $row[31] . "'"));
+                                                $arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $row[20] . "'"));
+                                                $dep_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $row[31] . "'"));
                                                 //assign names to results that are readable
                                                 $id = $row[0];
                                                 $title_name = $row[1];
@@ -316,7 +320,11 @@ $reservations = mysql_query($query);
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $row[28] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $row[27] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $row[27] . "'"));
-                                                $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_touroperator WHERE id='" . $row[5] . "'"));
+                                                 if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){
+                                                    $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_fsft_touroperator WHERE id='" . $row[5] . "'"));
+                                                } else {
+                                                    $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_touroperator WHERE id='" . $row[5] . "'"));
+                                                }
                                                 $rep_type = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reptype WHERE id='" . $row[24] . "'"));
                                                 $flight_class = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WHERE id='" . $row[17] . "'"));
                                                 $rep_name = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reps WHERE id_rep='" . $row[42] . "'"));
