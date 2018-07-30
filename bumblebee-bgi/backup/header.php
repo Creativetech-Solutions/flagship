@@ -25,8 +25,6 @@ function site_header($title) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=1190, initial-scale=1" />
         <meta name="author" content="Alvin Herbert" />
-        <meta http-equiv="cache-control" content="no-cache">
-        <meta http-equiv="expires" content="0">
         <meta http-equiv="pragma" content="no-cache" />
         
         <!--<link rel="icon" href="favicon.ico" type="image/x-icon" />-->

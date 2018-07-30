@@ -176,7 +176,7 @@ if (isset($_POST['addreservation'])) {
                 'transport_mode' => $val,
                 'driver' => $arr_driver[$key],
                 'vehicle' => $arr_vehicle_no[$key],
-                // 'luggage_vehicle' => $arr_luggage_vehicle_no[$key]
+                'luggage_vehicle' => $arr_luggage_vehicle_no[$key]
             );
             $arrival_transport_array[$key] = $tempArray;
         }
@@ -270,8 +270,8 @@ if (isset($_POST['addreservation'])) {
         }
     }
     $sql_5 = "INSERT INTO bgi_arrivals " .
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle,room_last_name, fast_track, luggage_vehicle_id) " .
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main','$luggageVehicle','$arr0_room_last_name', '$ftres', '$arr_luggage_vehicle_no')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle,room_last_name, fast_track) " .
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main','$luggageVehicle','$arr0_room_last_name', '$ftres')";
     $retval5 = mysql_query($sql_5, $conn);
     if (mysql_errno()) {
         echo $sql_5;
@@ -1750,7 +1750,7 @@ if (isset($_POST['addreservation'])) {
                             <div class="clearfix"></div>
                             <div class="form-group col-xs-6"><!-- vehicle # selection -->
                                 <label for="arr-luggage-vehicle-no">Luggage Vehicle</label>
-                                <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no">
+                                <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no[]">
                                     <option value="0">Select luggage vehicle</option>
                                     <?php include ('custom_updates/luggage_vehicle.php');?>
                                 </select>

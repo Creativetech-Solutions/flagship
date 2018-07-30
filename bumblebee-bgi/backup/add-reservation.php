@@ -1,4 +1,7 @@
-<?php
+<?php header("Content-Type: text/html; charset=ISO-8859-1");
+header('Cache-Control: no cache');
+session_cache_limiter('private_no_expire');
+session_start();
 $url = '//'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
@@ -6,7 +9,7 @@ error_reporting(E_ALL &~ E_DEPRECATED);
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,9"))
+  if (!$user->levelCheck("2,9,10"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -47,9 +50,6 @@ if(isset($_POST['addreservation']))
     $oper_code              = QuoteSmart(@$_POST['oper_code']);
     $tour_ref_no            = QuoteSmart(@$_POST['tour_ref_no']);
     $tour_notes             = QuoteSmart(@$_POST['tour_notes']);
-
-
-
 
     if(!empty($_POST['room_type'])){
         $room_type = QuoteSmart($_POST['room_type']);
@@ -196,7 +196,6 @@ if(isset($_POST['addreservation']))
         $jetCenter   = 0;
     }
 
-
     //Arrivals Transport Mode.
     $arr_transport_mode = $_POST['arr_transport'];
     $arrdriver = $_POST['arr_driver'];
@@ -259,7 +258,6 @@ if(isset($_POST['addreservation']))
             $i += 1;
         }
     }
-
 
     //Arrival 1
     $arr_date1              = QuoteSmart(@$_POST['arr_date1']);
@@ -1328,29 +1326,29 @@ if(isset($_POST['addreservation']))
     }
 
 
-function insertAdditionalTransport($dataArray, $conn){
-      if(mysql_errno()){
-            $lastArrival0ID = 0;
-        }else{
-            $lastArrival0ID = mysql_insert_id();
-        }
-
-        if(!empty($lastArrival0ID)){
-            //Need to Insert Arrival Id Column in array also
-            array_walk($dataArray,function(&$subArray,$key,$lastArrival0ID){
-                $subArray['dept_id'] = $lastArrival0ID;
-            },$lastArrival0ID);
-            foreach($dataArray as $subArray){
-                $dpt_transport_sql = build_sql_insert('bgi_departure_transports',$subArray);
-                //Now Run the Queries for this.
-                $dpt_transport_resource = mysql_query($dpt_transport_sql,$conn);
-                if(mysql_errno()) {
-                    //echo $arrivals_transport_sql;
-                    echo "<br/>LINE::".__LINE__."::". mysql_error();
-                }
+    function insertAdditionalTransport($dataArray, $conn){
+          if(mysql_errno()){
+                $lastArrival0ID = 0;
+            }else{
+                $lastArrival0ID = mysql_insert_id();
             }
-        }    
-}
+
+            if(!empty($lastArrival0ID)){
+                //Need to Insert Arrival Id Column in array also
+                array_walk($dataArray,function(&$subArray,$key,$lastArrival0ID){
+                    $subArray['dept_id'] = $lastArrival0ID;
+                },$lastArrival0ID);
+                foreach($dataArray as $subArray){
+                    $dpt_transport_sql = build_sql_insert('bgi_departure_transports',$subArray);
+                    //Now Run the Queries for this.
+                    $dpt_transport_resource = mysql_query($dpt_transport_sql,$conn);
+                    if(mysql_errno()) {
+                        //echo $arrivals_transport_sql;
+                        echo "<br/>LINE::".__LINE__."::". mysql_error();
+                    }
+                }
+            }    
+    }
 
     //If Depends on the checkbox, if not selected, then departures queries would execute.
     if($departures){
@@ -1548,11 +1546,20 @@ function insertAdditionalTransport($dataArray, $conn){
                 die('Could not enter data: ' . mysql_error());
             }
     mysql_close($conn);
+
+    /*if (isset($_POST['redirect_to']) && !empty($_POST['redirect_to']))
+        echo "<script>window.location='".$_POST['redirect_to'].".php?id=".$insertId."&sect=gh'</script>";
+    */ 
+
+    
     if(isset($sysRefNo) && !empty($sysRefNo))
-        echo "<script>window.location='add-reservation.php?ok=1&sysRef=$sysRefNo'</script>";
+        // echo "<script>window.location='add-reservation.php?ok=1&sysRef=$sysRefNo'</script>";
+        header('Location: add-reservation.php?ok=1&sysRef='.$sysRefNo);
     else
-        echo "<script>window.location='add-reservation.php?ok=1'</script>";
-	}
+        // echo "<script>window.location='add-reservation.php?ok=1'</script>";
+        header('Location: add-reservation.php?ok=1=');
+}
+
 ?>
 
     <style type="text/css">
@@ -2360,6 +2367,7 @@ function insertAdditionalTransport($dataArray, $conn){
                                     <div class="form-group col-xs-7"><!-- reference number field -->
                                         <label>Reference number</label>
                                         <input type="text" class="form-control" autocomplete="off" placeholder="reference number" id="tour-ref-no" name="tour_ref_no" value="" style="text-transform: none">
+                                        <span class="ref_no_check" data-id="0" style="font-size:12px;color:red"></span>
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-10"><!-- number of persons traveling -->
@@ -4203,9 +4211,10 @@ function insertAdditionalTransport($dataArray, $conn){
                                             <textarea class="form-control text-lowercase" rows="5" id="dpt-notes" name="dpt_notes" placeholder="Accounting notes: additional accounting comments and details here"></textarea>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="addreservation" />
                                 <div class="panel-footer">
                                     <button class="btn btn-default right20" type="reset" onclick="return disp_confirm()">Clear Form</button>                                    
-                                    <button name="addreservation" class="btn btn-primary" id="add" type="submit">Submit</button>
+                                    <button name="addreservation" class="btn btn-primary" id="add" type="button">Submit</button>
                                 </div>
                             </div>
                             </form>
@@ -4219,7 +4228,25 @@ function insertAdditionalTransport($dataArray, $conn){
             <!-- END PAGE CONTENT -->
         </div>
         <!-- END PAGE CONTAINER -->
-        
+        <div class="modal fade" id="fsft-checkbox-warn" tabindex="-1" role="dialog" aria-labelledby="hotelNotes" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">FSFT Checkbox</h4>
+                    </div>
+                    <div class="modal-body">
+                        You have not selected FSFT for this reservation
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary continue">Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- MESSAGE BOX-->
         <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
             <div class="mb-container">
@@ -4277,6 +4304,7 @@ function insertAdditionalTransport($dataArray, $conn){
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 <script type="text/javascript">
+    window.fsft_check = true;
     $('#tour-oper,.dropSelect, .select2').select2({
         minimumInputLength: 3
     });
@@ -4583,7 +4611,41 @@ function insertAdditionalTransport($dataArray, $conn){
         var $str = $(this).val();
         $(this).val($str.substr(0,1).toUpperCase()+$str.substr(1).toLowerCase());
     })
+
+    $(document).on('click','#add', function(e){
+        if($('#ftres:checked').length == 0 && $('#ftdepres:checked').length == 0 && window.fsft_check == true) {
+            $('#fsft-checkbox-warn').modal('show');
+        } else {
+            if($('#first-name').val() != '' && $('#last-name').val() != '' && $('.ref_no_check').attr('data-id') == 0){
+                $('#add-reservations').submit(); 
+            } else {
+                $('html, body').animate({
+                    scrollTop: $("#add-reservations").offset().top
+                }, 2000);
+            }
+        }
+
+    })
+    $(document).on('click','#fsft-checkbox-warn .continue', function(e){
+        window.fsft_check = false;
+        $('#fsft-checkbox-warn').modal('hide');
+    })
    
+    $(document).on('focusout', '#tour-ref-no', function(e){
+        var ref = $(this);
+        var ref_no = ref.val();
+        if(ref_no != ""){
+            $.ajax({
+                url: "<?=$url?>/custom_updates/check_field_exist.php",
+                type:"POST",
+                data:{ref_no:ref_no},
+                success:function(output){
+                    output = JSON.parse(output);
+                    ref.parents('.form-group').find('.ref_no_check').html(output["message"]).attr('data-id', output["exist"]);
+                }
+            });
+        }
+    })
 </script>
 
         <?php // to add transport mode 

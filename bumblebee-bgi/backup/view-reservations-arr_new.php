@@ -46,9 +46,6 @@ if(isset($_POST['fromDate'])){
     }
 
 }
-if(isset($_GET['name']) && !empty($_GET['name']))
-    $_POST['name'] = $_GET['name'];
-
 
 if(isset($_POST['name']) || isset($_POST['arr_date']) || isset($_POST['dept_date'])){
     
@@ -65,11 +62,11 @@ if(isset($_POST['name']) || isset($_POST['arr_date']) || isset($_POST['dept_date
         $reservationQuery .= " AND dpt_date = '".date('Y-m-d', strtotime($_POST['dept_date']))."'";
     } else $_POST['dept_date'] = '';
 
-    if(!isset($_GET['name']) || empty($_GET['name']))
-        $offset = 0;
+    $offset = 0;
     
 }
 $reservationQuery .= " LIMIT 10 OFFSET ".$offset;
+
 
 
 $reservations = mysql_query($reservationQuery);
@@ -80,8 +77,6 @@ $totalRows = mysql_fetch_row(mysql_query("SELECT FOUND_ROWS()"));
 
 if(isset($totalRows[0]))
     $totalRows = $totalRows[0];
-
-// echo $totalRows; exit;
 
 
 site_header('Reservation List - Arrivals');
@@ -203,7 +198,7 @@ site_header('Reservation List - Arrivals');
                                     <ul class="panel-controls panel-controls-title" style="width: 100%;">    
                                         <li class="pull-left" style="width: 83%;">
                                             
-                                    <form id="mainFilterForm" action="view-reservations-arr_new.php" method="POST">
+                                    <form id="mainFilterForm" action="" method="POST">
                                         <div class="panel-body table-responsive" style="padding-left:0">
                                             <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                                 <label for="arrivalDate">Search For:</label>
@@ -578,9 +573,7 @@ site_header('Reservation List - Arrivals');
                                             $lastpage = ceil($totalRows/10);
                                             if($page <= 4){
                                                 $pagi_start = 1;
-                                                if ($lastpage >= 5)
-                                                    $page_end = 5;
-                                                else $page_end = $lastpage;
+                                                $page_end = 5;
                                             }
                                             else if($page > 4 && $page < $lastpage - 2){
                                                 $pagi_start = $page - 2;
@@ -602,10 +595,6 @@ site_header('Reservation List - Arrivals');
                                                 echo '<a href="?page='.($page+1).'">Next</a>';
                                         ?>
                                         <a href="?page=<?=$lastpage?>">Last</a>
-
-                                        <div class="pull-right">
-                                            <span>Records : <?=$totalRows?></span>
-                                        </div>
                                       </div>
                                     </div>
                                 </div>
@@ -912,15 +901,6 @@ site_header('Reservation List - Arrivals');
         /* end reportrange */
 
     });
-
-    $(document).on('click','.pagination a', function(e){
-        e.preventDefault();
-        var href = $(this).attr('href');
-        var search = $('input[name="name"]').val();
-        if(search !="")
-            href += '&name='+search;
-        location.assign(href);
-    })
 </script>
     </body>
 </html>

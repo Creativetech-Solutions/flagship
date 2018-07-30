@@ -33,7 +33,6 @@ else $ftnotify='';*/
 $getArrivalQuery = "SELECT * FROM bgi_arrivals WHERE id='" . QuoteSmart($_GET['arrival_id']) . "'";
 //$reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
 $reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
-
 $get_arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $reservation[4] . "'"));
 $get_arr_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $reservation[3] . "'"));
 $get_arr_pickup = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $reservation[9] . "'"));  
@@ -106,7 +105,6 @@ if(isset($_POST['update']))
     $arr_hotel_notes     = QuoteSmart($_POST['arr_hotel_notes']);
     $rooms       = QuoteSmart($_POST['no_of_rooms']);   
     $user_action = "update arrival details: #ref:$flagship_ref";
-
     if($section == 'gh'){
         //Excursion
         $excursion_name = QuoteSmart(@$_POST['excursion_name']);
@@ -195,10 +193,6 @@ if(isset($_POST['update']))
     
     $sql = "UPDATE bgi_arrivals ".
     "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no', room_last_name = '$room_lastname'";
-    if(isset($_POST['arr_luggage_vehicle_no'])){
-        $arr_luggage_vehicle_no = $_POST['arr_luggage_vehicle_no'];
-         $sql .= ", luggage_vehicle_id = '$arr_luggage_vehicle_no'";
-    }
     if($section == 'gh') {
         $sql .= ", excursion_name = '$excursion_name', excursion_date = '$excursion_date', excursion_pickup = '$excursion_pickup', excursion_confirm_by = '$excursion_confirm_by', excursion_confirm_date = '$excursion_confirm_date', excursion_guests = '$excursion_guests'  , fast_track = '$ftnotify'";
     }
@@ -429,15 +423,6 @@ if(isset($_POST['update']))
                                         </option> 
                                     </select>
                                 </div>
-                                    <div class="clearfix"></div>
-                                    <div class="form-group col-xs-6"><!-- vehicle # selection -->
-                                        <label for="arr-luggage-vehicle-no">Luggage Vehicle</label>
-                                        <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no">
-                                            <option value="0">Select luggage vehicle</option>
-                                            <?php $lug_veh_id = $reservation[35];
-                                            include ('custom_updates/luggage_vehicle.php');?>
-                                        </select>
-                                    </div>
                                 <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">
                                         <label for="arr-transport-notes">Arrival & Transport notes</label>

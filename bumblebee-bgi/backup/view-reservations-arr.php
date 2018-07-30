@@ -1,7 +1,4 @@
-<?php 
-header('Cache-Control: no cache');
-session_cache_limiter('private_no_expire');
-session_start();
+<?php
 error_reporting(0);
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
@@ -28,14 +25,9 @@ echo "</pre>";*/
  */
 
 include('header.php');
-if(isset($_GET['page']))
-    $page = $_GET['page'];
-else 
-    $page = 1;
 
-$offset = ($page*10) - 10;
 //Grab all reservation info
-$reservationQuery = "SELECT SQL_CALC_FOUND_ROWS * FROM bgi_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -46,43 +38,16 @@ if(isset($_POST['fromDate'])){
     }
 
 }
-if(isset($_GET['name']) && !empty($_GET['name']))
-    $_POST['name'] = $_GET['name'];
 
-
-if(isset($_POST['name']) || isset($_POST['arr_date']) || isset($_POST['dept_date'])){
-    
-    if(isset($_POST['name']) && !empty($_POST['name'])){
-        $reservationQuery .= " AND (first_name LIKE '%".$_POST['name']."%' OR last_name LIKE '%".$_POST['name']."%' OR tour_ref_no LIKE '%".$_POST['name']."%' OR flight_class LIKE '%".$_POST['name']."%' OR ref_no_sys LIKE '%".$_POST['name']."%' OR dpt_notes LIKE '%".$_POST['name']."%' OR tour_notes LIKE '%".$_POST['name']."%')";
-
-    } else $_POST['name'] = '';
-
-    if (isset($_POST['arr_date']) && !empty($_POST['arr_date'])){
-        $reservationQuery .= " AND arr_date = '".date('Y-m-d', strtotime($_POST['arr_date']))."'";
-    } else $_POST['arr_date'] = '';
-
-    if (isset($_POST['dept_date']) && !empty($_POST['dept_date'])){
-        $reservationQuery .= " AND dpt_date = '".date('Y-m-d', strtotime($_POST['dept_date']))."'";
-    } else $_POST['dept_date'] = '';
-
-    if(!isset($_GET['name']) || empty($_GET['name']))
-        $offset = 0;
-    
-}
-$reservationQuery .= " LIMIT 10 OFFSET ".$offset;
-
+//echo  $reservationQuery;
 
 $reservations = mysql_query($reservationQuery);
-if(mysql_errno()){ 
+if(mysql_errno()){
     echo mysql_error();
 }
-$totalRows = mysql_fetch_row(mysql_query("SELECT FOUND_ROWS()"));
-
-if(isset($totalRows[0]))
-    $totalRows = $totalRows[0];
-
-// echo $totalRows; exit;
-
+// echo "<pre>";
+// print_r(mysql_fetch_array($reservations));
+// echo "</pre>";
 
 site_header('Reservation List - Arrivals');
 
@@ -101,16 +66,16 @@ site_header('Reservation List - Arrivals');
 </style>
 <script type="text/javascript" language="javascript" class="init">
     $(document).ready(function() {
-        $.datepicker.regional[""].dateFormat = 'yy-mm-dd';
+        $.datepicker.regional[""].dateFormat = 'yyyy-mm-dd';
         $.datepicker.setDefaults($.datepicker.regional['']);
-         } );
-       // new FixedHeader( document.getElementById('res-arrivals') );
+	       } );
+        new FixedHeader( document.getElementById('res-arrivals') );
 
 /* Add a click handler to the rows */
-  $("#res-arrivals tbody tr").on('click',function(event) {
-    $("#res-arrivals tbody tr").removeClass('row_selected');
-    $(this).addClass('row_selected');
-  });
+	$("#res-arrivals tbody tr").on('click',function(event) {
+		$("#res-arrivals tbody tr").removeClass('row_selected');
+		$(this).addClass('row_selected');
+	});
 
 </script>
 
@@ -120,37 +85,6 @@ site_header('Reservation List - Arrivals');
         overflow: hidden;
         float: none;
     }
-</style>
-<style>
-.pagination {
-    display: inline-block;
-}
-
-.pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-    border: 1px solid #ddd;
-}
-
-.pagination a.active {
-    background: linear-gradient(to bottom, white 0%, #dcdcdc 100%);
-      color: #333 !important;
-     border: 1px solid #979797;
-}
-
-.pagination a:hover:not(.active) {background-color: #ddd;}
-
-.pagination a:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-.pagination a:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
 </style>
 
                     <?php include ('profile.php'); ?>
@@ -180,54 +114,31 @@ site_header('Reservation List - Arrivals');
                 <div class="page-content-wrap">
                     <div class="row">
                         <div class="col-md-12">
-                             <!-- START DATATABLE EXPORT -->
+                            
                             <!-- START DATATABLE EXPORT -->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <div class="panel-title">
                                         <h3>Arrivals Schedules | <?php echo date("Y-m-d H:i"); ?></h3>
                                         
-                                            <form name="reportselect">
-                                            <select name="menu" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO" class="form-control">
-                                                <option selected="selected">Arrivals</option>
-                                                <option value="view-reservations.php">Arrivals &amp; Departures</option>
-                                                <option value="view-reservations-dpt.php">Departures</option>
-                                                <option value="view-flight-arr.php">Arrival Flight</option>
-                                                
-                                            </select>
-                                            </form>
+                            <form name="reportselect">
+                            <select name="menu" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO" class="form-control">
+                                <option selected="selected">Arrivals</option>
+                                <option value="view-reservations.php">Arrivals &amp; Departures</option>
+                                <option value="view-reservations-dpt.php">Departures</option>
+                                <option value="view-flight-arr.php">Arrival Flight</option>
+                                
+                            </select>
+                            </form>
 
-                                    </div>  
-
+                                    </div>                                     
                                     <!-- Date picker -->
-                                    <ul class="panel-controls panel-controls-title" style="width: 100%;">    
-                                        <li class="pull-left" style="width: 83%;">
-                                            
-                                    <form id="mainFilterForm" action="view-reservations-arr_new.php" method="POST">
-                                        <div class="panel-body table-responsive" style="padding-left:0">
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                <label for="arrivalDate">Search For:</label>
-                                                <input type="text" class="form-control" value="<?=$_POST['name']?>" name="name" placeholder="Search" />
-                                            </div>
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                <label for="locCoast">Arrival Date</label>
-                                                <input type="text" value="<?=$_POST['arr_date']?>" name="arr_date" class="form-control datepicker" placeholder="Search" autocomplete="off" />
-                                            </div>
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                <label for="tourOperator">Departure Date</label>
-                                                <input type="text" value="<?=$_POST['dept_date']?>" name="dept_date" class="form-control datepicker" placeholder="Search" autocomplete="off"  />
-                                            </div>
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                <button type="submit"  class="btn btn-default" style="margin-top: 20px;" id="applyFilterBtn"> Apply Filter </button>
-                                            </div>
-                                        </div>
-                                    </form>   
-                                        </li>                                
+                                    <ul class="panel-controls panel-controls-title">                                        
                                         <li>
-                                            <!-- <label for="reportrange" style="display: block;">Arrival Date Filter</label>
+                                            <label for="reportrange" style="display: block;">Arrival Date Filter</label>
                                             <div id="reportrange" class="dtrange">
                                                 <span></span><b class="caret"></b>
-                                            </div>    -->                                  
+                                            </div>                                     
                                         </li>
                                         <li>
                                             <button class="btn btn-success" style="align-self: center; margin-top: 10px; margin-left: auto; margin-right: auto; float: right;" id="exportBtn">Export Excel</button>
@@ -332,7 +243,7 @@ site_header('Reservation List - Arrivals');
                                                 $arr_notes = $row[44];
                                                 $rep_notes = $row[11];
                                                 $acc_notes = $row[35];
-                                            //$roomType = $row[23];
+//                                                $roomType = $row[23];
                                                 $room_no = $row[57];
                                                 $rooms = $row[56];
                                                 $arr_hotel_notes = $row[46];
@@ -569,45 +480,8 @@ site_header('Reservation List - Arrivals');
                                         ?>
                                         </tbody>
                                         <?php endif; ?>
-                                    </table>      
-
-                                    <div class="center">
-                                      <div class="pagination">
-                                        <a href="?page=1">First</a>
-                                        <?php
-                                            $lastpage = ceil($totalRows/10);
-                                            if($page <= 4){
-                                                $pagi_start = 1;
-                                                if ($lastpage >= 5)
-                                                    $page_end = 5;
-                                                else $page_end = $lastpage;
-                                            }
-                                            else if($page > 4 && $page < $lastpage - 2){
-                                                $pagi_start = $page - 2;
-                                                $page_end = $page + 2;
-                                            } else {
-                                                $pagi_start = $lastpage - 4;
-                                                $page_end = $lastpage;
-                                            }
-                                            if($page != 1)
-                                             echo '<a href="?page='.($page-1).'">Prev</a>';
-                                            for($i = $pagi_start; $i <= $page_end; $i++){
-                                                if($i < $page-3) continue;
-                                                if ($i > $page+3) break;
-                                                $active = ($page == $i) ? 'active':'';
-                                                echo '<a class="'.$active.'" href="?page='.$i.'">'.$i.'</a>';
-                                            }
-
-                                            if($page != $lastpage)
-                                                echo '<a href="?page='.($page+1).'">Next</a>';
-                                        ?>
-                                        <a href="?page=<?=$lastpage?>">Last</a>
-
-                                        <div class="pull-right">
-                                            <span>Records : <?=$totalRows?></span>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    </table>                                    
+                                    
                                 </div>
                             </div>
                             <!-- END DATATABLE EXPORT -->
@@ -795,7 +669,19 @@ site_header('Reservation List - Arrivals');
        });
 
 
-     
+        //Code for DatePicker Submit
+        $("body").on("click",".range_inputs > button.applyBtn",function(e){
+            console.log("im working");
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate
+            };
+            var postURL = window.location.href;
+            $.redirect(postURL,postFilterData,'POST','_SELF');
+        });
+
         
         //Rep Notes
         $(".repNotes").on("click",function(){
@@ -849,7 +735,7 @@ site_header('Reservation List - Arrivals');
         //datatables
         $('#res-arrivals').DataTable( {
             "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            "dom": 'T<"clear">Brt',
+            "dom": 'T<"clear">lBfrtip',
             "buttons": [
                 {
                     extend: 'excel',
@@ -912,15 +798,6 @@ site_header('Reservation List - Arrivals');
         /* end reportrange */
 
     });
-
-    $(document).on('click','.pagination a', function(e){
-        e.preventDefault();
-        var href = $(this).attr('href');
-        var search = $('input[name="name"]').val();
-        if(search !="")
-            href += '&name='+search;
-        location.assign(href);
-    })
 </script>
     </body>
 </html>

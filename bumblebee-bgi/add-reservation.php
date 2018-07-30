@@ -1,7 +1,13 @@
-<?php header("Content-Type: text/html; charset=ISO-8859-1");
+<?php 
+/*header("Content-Type: text/html; charset=ISO-8859-1");
 header('Cache-Control: no cache');
-session_cache_limiter('private_no_expire');
-session_start();
+session_cache_limiter('private_no_expire');*/
+// session_start();
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 $url = '//'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
@@ -105,7 +111,7 @@ if(isset($_POST['addreservation']))
         $arr_time               = QuoteSmart(@$_POST['arr_time']);
         $arr_flight_no          = QuoteSmart(@$_POST['arr_flight_no']);
         $flight_class           = QuoteSmart(@$_POST['flight_class']);
-    /*    if(isset($_POST['arr_transport'])){
+        /*    if(isset($_POST['arr_transport'])){
             $arr_transport          =  $_POST['arr_transport'];
         }else{
             $arr_transport          = '';
@@ -218,7 +224,7 @@ if(isset($_POST['addreservation']))
                 'transport_mode' => $val,
                 'driver' => $arrdriver[$key],
                 'vehicle' => $arr_vehicle[$key],
-                'luggage_vehicle' => $arr_luggage_vehicle_no[$key]
+                // 'luggage_vehicle' => $arr_luggage_vehicle_no[$key]
             );
             $arrival_transport_array[$key] = $tempArray;
             $i += 1;
@@ -662,7 +668,7 @@ if(isset($_POST['addreservation']))
     $dpttransport = $_POST['dpt3_transport'];
     $dptdriver = $_POST['dpt3_driver'];
     $dptvehicle_no = $_POST['dpt3_vehicle_no'];
-    //$dpt_luggage_vehicle_no = $_POST['arr_luggage_vehicle_no'];
+    $dpt_luggage_vehicle_no = $_POST['arr_luggage_vehicle_no'];
 
     $dpt3_transport  = $dpt_driver3 = $dpt_vehicle_no3 = '';
 
@@ -889,8 +895,8 @@ if(isset($_POST['addreservation']))
     //If Depends on the checkbox, if not selected, then arrivals queries would execute.
     if($arrivals){
         $sql_5 = "INSERT INTO bgi_arrivals ".
-            "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests,room_last_name) ".
-            "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$arr0_room_no', '$arr_main', '$luggageVehicle','$ftres','$excursion_name','$excursion_date','$excursion_pickup','$excursion_confirm_by','$excursion_confirm_date','$excursion_guests','$arr0_room_last_name')";
+            "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests,room_last_name, luggage_vehicle_id) ".
+            "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$arr0_room_no', '$arr_main', '$luggageVehicle','$ftres','$excursion_name','$excursion_date','$excursion_pickup','$excursion_confirm_by','$excursion_confirm_date','$excursion_guests','$arr0_room_last_name', '$arr_luggage_vehicle_no')";
         $retval5 = mysql_query( $sql_5, $conn );
         /*    echo $sql_5;
             exit;*/
@@ -984,8 +990,8 @@ if(isset($_POST['addreservation']))
         $arrival1active = QuoteSmart($_POST['arrival1active']);
         if($arrival1active == 1){
             $sql_6 = "INSERT INTO bgi_arrivals ".
-                "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
-                "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1','$excursion_name1','$excursion_date1','$excursion_pickup1','$excursion_confirm_by1','$excursion_confirm_date1','$excursion_guests1')";
+                "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests, luggage_vehicle_id) ".
+                "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1','$excursion_name1','$excursion_date1','$excursion_pickup1','$excursion_confirm_by1','$excursion_confirm_date1','$excursion_guests1', '$arr_luggage_vehicle_no')";
             $retval6 = mysql_query( $sql_6, $conn );
             if(mysql_errno()){
                 echo "<br/>".__LINE__."::". mysql_error();
@@ -2495,7 +2501,7 @@ if(isset($_POST['addreservation']))
                                     <div class="clearfix"></div>
                                     <div class="form-group col-xs-6"><!-- vehicle # selection -->
                                         <label for="arr-luggage-vehicle-no">Luggage Vehicle</label>
-                                        <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no[]">
+                                        <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no">
                                             <option value="0">Select luggage vehicle</option>
                                             <?php include ('custom_updates/luggage_vehicle.php');?>
                                         </select>
