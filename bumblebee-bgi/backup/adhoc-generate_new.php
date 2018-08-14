@@ -323,7 +323,7 @@ if(isset($TotalRows) and $TotalRows > 0){
     $allReps = [];
   
     while($row = mysqli_fetch_assoc($queryResource)) {
-      /*  if(isset($row['Child'])){
+        if(isset($row['Child'])){
             $child =$row['Child'];
             unset($row['Child']);
         }
@@ -333,7 +333,7 @@ if(isset($TotalRows) and $TotalRows > 0){
             unset($row['Teen']);
         }
         else $teen = '-';*/
-        /*if(isset($row['Infant'])){
+        if(isset($row['Infant'])){
             $infant = $row['Infant'];
             unset($row['Infant']);
         }
@@ -344,12 +344,10 @@ if(isset($TotalRows) and $TotalRows > 0){
         }
         else $adult = '-';
         if($adult!='-'|| $child!='-'||$infant!='-'){
-             $row['A_C_I'] = $adult.' + '.$child.' + '.$infant;
+             $row['A_C_I'] = $adult.' / '.$child.' / '.$infant;
         } else {
-        }*/
-
-        if(isset($row['A_C_I']))
             unset($row['A_C_I']);
+        }
 
         if(isset($row['Payment_Type'])){
             $paymentType = $row['Payment_Type'];
@@ -493,7 +491,7 @@ if(isset($TotalRows) and $TotalRows > 0){
     $guestIds = [];
     $testArray = [];
     // here wo make the array of reservation and guest columns, that will use later to duplicte the main reservation
-    $reservationCols = ['GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
+    $reservationCols = ['GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','A_C_I','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
 
     $guestCols=['Guest_Title_Name','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Teen_Age','Guest_Child_Age','Guest_Infant_Age','Price','Guest_id'];
 

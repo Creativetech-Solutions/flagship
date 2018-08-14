@@ -1,4 +1,6 @@
 <?php
+
+
 //Pre Defined Settings.
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -40,8 +42,8 @@ if(empty($_POST)){
         $_SESSION['adhoc_report'] = $_POST;
     }
 
-ini_set('memory_limit', '9999999999');
-ini_set('max_execution_time', 0);
+    ini_set('memory_limit', '9999999999');
+    ini_set('max_execution_time', 0);
     $postItems = [];
    // $reportSettings = [];
     foreach($_POST as $postedItem){
@@ -96,7 +98,7 @@ $query = 'SELECT ';
 
 $selectData = selectData($postItems);
 
-if($_REQUEST['sect'] == 'fsft') 
+if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all') 
     $selectData = $selectData.', R.ftnotify as GH';
 
 $query .= $selectData . ', R.ref_no_sys as Ref_no_sys FROM bgi_reservations R';
@@ -257,10 +259,11 @@ if(strpos($selectData, '`AH`') || strpos($selectData, 'Additional_Hotel') || str
 
 if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){ 
     $query .= ' WHERE (R.fast_track=1 || R.ftnotify=1) && R.status=1';
-} else {
+} elseif(isset($_REQUEST['sect']) && $_REQUEST['sect']=='gh') {
     $_REQUEST['sect'] = 'gh';
     $query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status=1';
 }
+else $query .= ' WHERE R.status=1';
 
 
 if(!isset($_REQUEST['fromDate']) || !isset($_REQUEST['toDate'])){
@@ -287,7 +290,6 @@ if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
 
 
 $query .= ' ORDER BY R.id';
-
 
 
 $queryResource = mysqli_query($conn,$query);
@@ -417,7 +419,9 @@ if(isset($TotalRows) and $TotalRows > 0){
             if($row['GH'] == 1)
                 $row['GH'] = 'Y';
             else $row['GH'] = 'N';
-            $row = array('GH'=>$row['GH']) + $row;
+
+            if($_REQUEST['sect'] == 'fsft')
+                $row = array('GH'=>$row['GH']) + $row;
         }
 
         //added by fahad 30-8-17
@@ -448,6 +452,17 @@ if(isset($TotalRows) and $TotalRows > 0){
             else $row['Client'] = '';
         }
 
+        if(isset($row['Type'])){
+            if($row['Type'] == 1)
+                $row['Type'] = 'FSFT';
+            else {
+                if($row['GH'] == 'Y')
+                    $row['Type'] = 'GH (FSFT Checked)';
+                else $row['Type'] = 'GH';
+            }
+            unset($row['GH']);
+        }
+
         $resultData[] = $row;
 
     }
@@ -458,7 +473,7 @@ if(isset($TotalRows) and $TotalRows > 0){
     $guestIds = [];
     $testArray = [];
     // here wo make the array of reservation and guest columns, that will use later to duplicte the main reservation
-    $reservationCols = ['GH','Id','FROM_GH','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','A_C_I','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
+    $reservationCols = ['GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','A_C_I','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
     $guestCols=['Guest_Title_Name','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Teen_Age','Guest_Child_Age','Guest_Infant_Age','Price','Guest_id'];
 
     $countKeys = [];

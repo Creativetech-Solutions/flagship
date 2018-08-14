@@ -322,8 +322,8 @@ if(isset($TotalRows) and $TotalRows > 0){
     $resultData = [];
     $allReps = [];
   
-    while($row = mysqli_fetch_assoc($queryResource)) {
-      /*  if(isset($row['Child'])){
+    /*while($row = mysqli_fetch_assoc($queryResource)) {
+        if(isset($row['Child'])){
             $child =$row['Child'];
             unset($row['Child']);
         }
@@ -346,10 +346,8 @@ if(isset($TotalRows) and $TotalRows > 0){
         if($adult!='-'|| $child!='-'||$infant!='-'){
              $row['A_C_I'] = $adult.' + '.$child.' + '.$infant;
         } else {
-        }*/
-
-        if(isset($row['A_C_I']))
             unset($row['A_C_I']);
+        }*/
 
         if(isset($row['Payment_Type'])){
             $paymentType = $row['Payment_Type'];

@@ -237,11 +237,7 @@ else {
                                                         <input class="a_c_i" type="checkbox" value="1" id="infant" name="R.infant::Infant" <?=in_array('R.infant::Infant', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong># of Infants</strong>
                                                 </li>
-                                                        <input type="hidden" value="1" id="a_c_i" name="R.id::A_C_I" 
-                                                        <?php 
-                                                        if(in_array('R.infant::Infant', $selectedCheckBoxesNames) || in_array('R.child::Child', $selectedCheckBoxesNames) || in_array('R.child::Adult', $selectedCheckBoxesNames)){
-                                                            echo 'checked';
-                                                            }?> /> 
+                                                       
                                                 <li class="list-group-item">
                                                         <input type="checkbox" value="1" id="tour_notes" name="R.tour_notes::Tour_Notes" <?=in_array('R.tour_notes::Tour_Notes', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Rep Notes</strong>

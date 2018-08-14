@@ -70,7 +70,9 @@ if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])){
 else {
     if($_REQUEST['sect']=='fsft'){
         $fsft = 1;
-    } else {
+    } else if($_REQUEST['sect']=='all') {
+        $fsft = 2;
+    }else  {
         $fsft = 0;
     }
     $query = 'SELECT `id`, `name` FROM bgi_reports WHERE fsft = '.$fsft;
@@ -119,7 +121,12 @@ else {
                             <?php
                                 if(isset($result)){
                                         while($row = mysql_fetch_assoc($result)){
-                                            echo '<a class="btn btn-danger btn-sm reportBtn" data-id="'.$row['id'].'" href="adhoc_report.php?report_id='.$row['id'].'&sect='.$_REQUEST['sect'].'">'.$row['name'].'</a>';
+                                            if($_REQUEST['sect']=='all')
+                                                $report_file = 'adhoc_report_all.php';
+                                            else 
+                                                $report_file = 'adhoc_report.php';
+
+                                            echo '<a class="btn btn-danger btn-sm reportBtn" data-id="'.$row['id'].'" href="'.$report_file.'?report_id='.$row['id'].'&sect='.$_REQUEST['sect'].'">'.$row['name'].'</a>';
                                         }
                                     }
                              ?>
@@ -155,6 +162,12 @@ else {
                                                     <input type="checkbox" value="1" id="res_from_gh" name="R.is_from_gh::FROM_GH" <?=in_array('R.is_from_gh::FROM_GH', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>From GH?</strong>
                                                 </li>
+                                            <?php }  if($_REQUEST['sect'] == 'all'){ ?>
+                                             
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" id="res_from_gh" name="R.fast_track::Type" <?=in_array('R.fast_track::Type', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Type (GH/FSFT)</strong>
+                                                </li>
                                             <?php } ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" id="title" name="R.title_name::Title_Name" <?=in_array('R.title_name::Title_Name', $selectedCheckBoxesNames)?'checked':''?>/> 
@@ -168,7 +181,7 @@ else {
                                                 <input type="checkbox" value="1" id="lastName" name="R.last_name::Last_Name" <?=in_array('R.last_name::Last_Name', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Last Name</strong>
                                             </li>
-                                               <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                               <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.G.email::Guest_Email" <?=in_array('R.G.email::Guest_Email', $selectedCheckBoxesNames)?'checked':''?>/>
                                                 <strong>Guest Email</strong>
@@ -183,7 +196,7 @@ else {
                                                 <strong>Passenger Name Record (PNR)</strong>
                                             </li>
 
-                                            <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                            <?php if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all'){ ?>
                                              
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" id="arr_service_only" name="R.id::Arrival_Service_Only" <?=in_array('R.id::Arrival_Service_Only', $selectedCheckBoxesNames)?'checked':''?>/> 
@@ -241,7 +254,7 @@ else {
                                                         <input type="checkbox" value="1" id="rep_phone" name="R.rep::Rep_Phones" <?=in_array('R.rep::Rep_Phones', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Rep Phones</strong>
                                                 </li>
-                                                  <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                                  <?php if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all'){ ?>
                                                   <li class="list-group-item">
                                                     <input type="checkbox" value="1" id="price_per_person" name="R.sup_per_person::$_Per_Person" <?=in_array('R.sup_per_person::$_Per_Person', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>$ Per Person</strong>
@@ -293,7 +306,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.G.infant_age::Guest_Infant_Age" <?=in_array('R.G.infant_age::Guest_Infant_Age', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Infant</strong>
                                             </li>
-                                            <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                            <?php if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" id="total_amount" name="R.sup_total_amount::Price" <?=in_array('R.sup_total_amount::Price', $selectedCheckBoxesNames)?'checked':''?>/> 
                                             <strong>Price</strong>
@@ -312,7 +325,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.arr_date::Arr_Date" <?=in_array('R.A.arr_date::Arr_Date', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Date</strong>
                                             </li>
-                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                            <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.A.fast_track::Arr_Fast_Track" <?=in_array('R.A.fast_track::Arr_Fast_Track', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Fast Track</strong>
@@ -346,7 +359,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.arr_transport_notes::Arr_and_Transport_Notes" <?=in_array('R.A.arr_transport_notes::Arr_and_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Arrival &amp; Transport Notes</strong>
                                             </li>
-                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                            <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.AL.name::Arr_Pickup" <?=in_array('R.AL.name::Arr_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Pickup</strong>
@@ -356,7 +369,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.ADL.name::Arr_Dropoff" <?=in_array('R.ADL.name::Arr_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Dropoff</strong>
                                             </li>
-                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                            <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.RP.rep_type::Arr_Rep_Type" <?=in_array('R.RP.rep_type::Arr_Rep_Type', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Rep Type</strong>
@@ -394,7 +407,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.luggage_vehicle::Arr_Lugguage_Vehicle" <?=in_array('R.A.luggage_vehicle::Arr_Lugguage_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Luggage Vehicle</strong>
                                             </li>
-                                             <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                             <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.A.excursion_name::Arr_Excursion_Name" <?=in_array('R.A.excursion_name::Arr_Excursion_Name', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Excursion Name</strong>
@@ -424,7 +437,7 @@ else {
                                     </div>
 
 
-                                    <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                    <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
                                         <h4><strong>Hotel</strong></h4>
                                         <label for="selectAllArrivalsInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrivalsInformation">Select All</label>
@@ -468,7 +481,7 @@ else {
                                         </ul>
                                     </div>
                                     <?php }?>
-                                    <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                    <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
                                         <h4><strong>Arrival Additional Rooms</strong></h4>
                                         <label for="selectAllAddRooms"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddRooms">Select All</label>
@@ -491,7 +504,7 @@ else {
                                 </div>
                                 <div class="col-md-4 marginBotBox">
 
-                                    <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                    <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
                                         <h4><strong>Additional Arrival Transfer</strong></h4>
                                         <label for="selectAllAddTransport"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddTransport">Select All</label>
@@ -639,7 +652,7 @@ else {
                                                     <input type="checkbox" value="1" name="R.D.dpt_date::Dept_Date" <?=in_array('R.D.dpt_date::Dept_Date', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Date</strong>
                                                 </li>
-                                                <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                                <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.fast_track::Dep_Fast_Track" <?=in_array('R.D.fast_track::Dep_Fast_Track', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Fast Track</strong>
@@ -678,7 +691,7 @@ else {
                                                     <strong>Pickup Time</strong>
                                                 </li>
 
-                                                <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                                <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.DDL.name::Dept_Dropoff" <?=in_array('R.DDL.name::Dept_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Dropoff</strong>
@@ -699,7 +712,7 @@ else {
                                                     <strong>Jet Center</strong>
                                                 </li>
                                                 <?php
-                                                    if($_REQUEST['sect']  == 'gh'){ ?>
+                                                    if($_REQUEST['sect']  == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                                      <li class="list-group-item">
                                                         <input type="checkbox" value="1" name="R.D.dpt_vouchers::Dept_Voucher" <?=in_array('R.D.dpt_vouchers::Dept_Voucher', $selectedCheckBoxesNames)?'checked':''?> />
                                                         <strong>Voucher</strong>
@@ -722,7 +735,7 @@ else {
                                     </div>
 
 
-                                    <?php if($_REQUEST['sect'] == 'gh'){ ?>
+                                    <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
                                         <h4><strong>Additional Departure Transfer</strong></h4>
                                         <label for="selectAllAddTransport"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddTransport">Select All</label>
@@ -859,7 +872,11 @@ else {
             }
             //Getting All Inputs.
             var formData =   $('#adhocReportForm').serializeArray();
-            var postURL = '<?=$url?>/adhoc_report.php?sect=<?=$_REQUEST["sect"]?>&fromDate='+fromDate+'&toDate='+toDate;
+            <?php if($_REQUEST["sect"] == 'all') { ?>
+                var postURL = '<?=$url?>/adhoc_report_all.php?sect=<?=$_REQUEST["sect"]?>&fromDate='+fromDate+'&toDate='+toDate;
+            <?php } else { ?> 
+                var postURL = '<?=$url?>/adhoc_report.php?sect=<?=$_REQUEST["sect"]?>&fromDate='+fromDate+'&toDate='+toDate;
+            <?php } ?>
             //Just Redirect it.
             $.redirect(postURL,formData,'POST');
 
@@ -972,7 +989,11 @@ else {
 
         $('#generateSavedReport').on('click',function(e){
             e.preventDefault();
-            var url = "adhoc_report.php?report_id='<?=$row['id']?>'&sect='<?=$_REQUEST['sect']?>'";
+            <?php if($_REQUEST["sect"] == 'all') { ?>
+                var url = "adhoc_report_all.php?report_id='<?=$row['id']?>'&sect='<?=$_REQUEST['sect']?>'";
+            <?php } else { ?> 
+                var url = "adhoc_report.php?report_id='<?=$row['id']?>'&sect='<?=$_REQUEST['sect']?>'";
+            <?php } ?>
             //Setting Up Filter for FromDate and ToDate.
             var modal = $(this).parents('.modal');
             var startDate = modal.find('#startDate').val();
@@ -994,7 +1015,12 @@ else {
                 fromDate:startDate,
                 toDate:endDate
             };
-            $.redirect('adhoc_report.php',data,'get');
+           <?php if($_REQUEST["sect"] == 'all') { ?>
+                $.redirect('adhoc_report_all.php',data,'get');
+          
+           <?php } else { ?> 
+                $.redirect('adhoc_report.php',data,'get');
+            <?php } ?>
             //From Date and To Date.
 //            window.location.href = url+fromDateAndToDate;
         });

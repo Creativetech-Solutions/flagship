@@ -1,14 +1,12 @@
 <?php
-
-    error_reporting(0);
+//error_reporting(0);
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
   if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
-  
+      
   $row = $user->getUserData();
-
 ?> 
 <?php
 /**
@@ -19,19 +17,8 @@
 include('header.php');
 site_header('Hotel Reconfirmation Listing');
 
-
-if(isset($_GET['page']))
-    $page = $_GET['page'];
-
-else 
-    $page = 1;
-
-$offset = ($page*10) - 10;
-
-
 //Grab all reservation info
-$arrivalConfirmations = "SELECT SQL_CALC_FOUND_ROWS * FROM bgi_reservations WHERE status = 1";
-
+$arrivalConfirmations = "SELECT * FROM bgi_reservations WHERE status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -41,40 +28,7 @@ if(isset($_POST['fromDate'])){
         $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
     }
 }
-if(isset($_GET['name']) && !empty($_GET['name']))
-    $_POST['name'] = $_GET['name'];
-
-
-if(isset($_POST['name']) || isset($_POST['arr_date']) || isset($_POST['dept_date'])){
-    
-    if(isset($_POST['name']) && !empty($_POST['name'])){
-        $arrivalConfirmations .= " AND (first_name LIKE '%".$_POST['name']."%' OR last_name LIKE '%".$_POST['name']."%' OR tour_ref_no LIKE '%".$_POST['name']."%' OR flight_class LIKE '%".$_POST['name']."%' OR ref_no_sys LIKE '%".$_POST['name']."%' OR dpt_notes LIKE '%".$_POST['name']."%' OR tour_notes LIKE '%".$_POST['name']."%')";
-
-    } else $_POST['name'] = '';
-
-    if (isset($_POST['arr_date']) && !empty($_POST['arr_date'])){
-        $arrivalConfirmations .= " AND arr_date = '".date('Y-m-d', strtotime($_POST['arr_date']))."'";
-    } else $_POST['arr_date'] = '';
-
-    if (isset($_POST['dept_date']) && !empty($_POST['dept_date'])){
-        $arrivalConfirmations .= " AND dpt_date = '".date('Y-m-d', strtotime($_POST['dept_date']))."'";
-    } else $_POST['dept_date'] = '';
-
-    if(!isset($_GET['name']) || empty($_GET['name']))
-        $offset = 0;
-    
-}
-$arrivalConfirmations .= " LIMIT 10 OFFSET ".$offset;
-
 $reservations = mysql_query($arrivalConfirmations);
-if(mysql_errno()){ 
-    echo mysql_error();
-}
-$totalRows = mysql_fetch_row(mysql_query("SELECT FOUND_ROWS()"));
-
-if(isset($totalRows[0]))
-    $totalRows = $totalRows[0];
-
 ?>
 <style type="text/css">
     .repNotes{
@@ -87,45 +41,6 @@ text-overflow: ellipsis;
         cursor: pointer;
     }
 
-</style>
-<style type="text/css">
-    ul.panel-controls > li{
-        display: block;
-        overflow: hidden;
-        float: none;
-    }
-</style>
-<style>
-.pagination {
-    display: inline-block;
-}
-
-.pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-    border: 1px solid #ddd;
-}
-
-.pagination a.active {
-    background: linear-gradient(to bottom, white 0%, #dcdcdc 100%);
-      color: #333 !important;
-     border: 1px solid #979797;
-}
-
-.pagination a:hover:not(.active) {background-color: #ddd;}
-
-.pagination a:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-.pagination a:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-.panel-controls-title.dt-picker-wrap{    position: absolute; right: 10px; top: 47%;}
 </style>
 
                     <?php include ('profile.php'); ?>
@@ -158,49 +73,16 @@ text-overflow: ellipsis;
                             
                             <!-- START DATATABLE EXPORT -->
                             <div class="panel panel-default">
-                                <div class="panel-heading" style="position:relative">
-                                    
+                                <div class="panel-heading">
                                     <h3 class="panel-title">Arrivals Schedules</h3>
-
-
-                                     <ul class="panel-controls panel-controls-title" style="width: 100%;">    
-                                        <li class="pull-left" style="width: 83%;">
-                                            
-                                            <form id="mainFilterForm" action="arrival-reconfirmation.php" method="POST">
-                                                <div class="panel-body table-responsive" style="padding-left:0">
-                                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                        <label for="arrivalDate">Search For:</label>
-                                                        <input type="text" class="form-control" value="<?=$_POST['name']?>" name="name" placeholder="Search" />
-                                                    </div>
-                                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                        <label for="locCoast">Arrival Date</label>
-                                                        <input type="text" value="<?=$_POST['arr_date']?>" name="arr_date" class="form-control datepicker" placeholder="Search" autocomplete="off" />
-                                                    </div>
-                                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                        <label for="tourOperator">Departure Date</label>
-                                                        <input type="text" value="<?=$_POST['dept_date']?>" name="dept_date" class="form-control datepicker" placeholder="Search" autocomplete="off"  />
-                                                    </div>
-                                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                                        <button type="submit"  class="btn btn-default" style="margin-top: 20px;" id="applyFilterBtn"> Apply Filter </button>
-                                                    </div>
-                                                </div>
-                                            </form>   
-                                        </li>  
-                                    </ul>
-                                    <ul class="panel-controls panel-controls-title dt-picker-wrap">
+                                    <ul class="panel-controls panel-controls-title">
                                         <li>
                                             <div class="dtrange" id="reportrange">
                                                 <span>August 3, 2016 - September 1, 2016</span><b class="caret"></b>
                                             </div>
                                         </li>
                                     </ul>
-
-                                </div> 
-
-
-
-
-
+                                </div>  
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
                                         <?php if ($user->levelCheck("2,9")) : ?>
@@ -297,44 +179,7 @@ text-overflow: ellipsis;
                                         ?>
                                         </tbody>
                                         <?php endif; ?>
-                                    </table>
-                                    <div class="center">
-                                      <div class="pagination">
-                                        <a href="?page=1">First</a>
-                                        <?php
-                                            $lastpage = ceil($totalRows/10);
-                                            if($page <= 4){
-                                                $pagi_start = 1;
-                                                if ($lastpage >= 5)
-                                                    $page_end = 5;
-                                                else $page_end = $lastpage;
-                                            }
-                                            else if($page > 4 && $page < $lastpage - 2){
-                                                $pagi_start = $page - 2;
-                                                $page_end = $page + 2;
-                                            } else {
-                                                $pagi_start = $lastpage - 4;
-                                                $page_end = $lastpage;
-                                            }
-                                            if($page != 1)
-                                             echo '<a href="?page='.($page-1).'">Prev</a>';
-                                            for($i = $pagi_start; $i <= $page_end; $i++){
-                                                if($i < $page-3) continue;
-                                                if ($i > $page+3) break;
-                                                $active = ($page == $i) ? 'active':'';
-                                                echo '<a class="'.$active.'" href="?page='.$i.'">'.$i.'</a>';
-                                            }
-
-                                            if($page != $lastpage)
-                                                echo '<a href="?page='.($page+1).'">Next</a>';
-                                        ?>
-                                        <a href="?page=<?=$lastpage?>">Last</a>
-
-                                        <div class="pull-right">
-                                            <span>Records : <?=$totalRows?></span>
-                                        </div>
-                                      </div>
-                                    </div>                                    
+                                    </table>                                    
                                     
                                 </div>
                             </div>
@@ -469,14 +314,14 @@ text-overflow: ellipsis;
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script> 
-        <!--<script type="text/javascript" src="js/bootstrap-editable.min.js"></script> -->      
+        <script type="text/javascript" src="js/bootstrap-editable.min.js"></script>       
         <!-- END PLUGINS -->
         
         <!-- START THIS PAGE PLUGINS-->        
         <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+        
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
-
 <link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
 <script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
@@ -495,8 +340,7 @@ text-overflow: ellipsis;
 <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
         <!-- END THIS PAGE PLUGINS-->  
         
-        <!-- START TEMPLATE -->
-        <script type="text/javascript" src="js/jquery.dataTables.columnFilter.js"></script>      
+        <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>
         <script type="text/javascript" src="js/actions.js"></script>
 
@@ -563,21 +407,13 @@ text-overflow: ellipsis;
         /* end reportrange */
 
     });
-$(document).on('click','.pagination a', function(e){
-        e.preventDefault();
-        var href = $(this).attr('href');
-        var search = $('input[name="name"]').val();
-        if(search !="")
-            href += '&name='+search;
-        location.assign(href);
-    });
 </script>
 <script type="text/javascript" language="javascript" class="init">
     $(document).ready(function() {
         $('#res-arrivals').DataTable( {
             "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            //"order": [[ 0, 'asc' ], [ 3, 'asc' ]],
-            "dom": 'T<"clear">Brt',
+            "order": [[ 0, 'asc' ], [ 3, 'asc' ]],
+            "dom": 'T<"clear">lBfrtip',
             "buttons": [
                 {
                     extend: 'excel',
@@ -586,7 +422,7 @@ $(document).on('click','.pagination a', function(e){
                         modifier: {
                             page: 'current'
                         },
-                       columns: 'thead th:not(:first-child)'
+                        columns: 'thead th:not(:first-child)'
                     }
                 },
                 {
@@ -597,11 +433,6 @@ $(document).on('click','.pagination a', function(e){
                             page: 'all'
                         },
                         columns: 'thead th:not(:first-child)'
-                    },
-                    
-                    action: function (e, dt, button, config)
-                    {
-                        location.href = "custom_updates/export_arrival_information.php";
                     }
                 }
             ]
@@ -612,11 +443,6 @@ $(document).on('click','.pagination a', function(e){
             $("#res-arrivals tbody tr").removeClass('row_selected');
             $(this).addClass('row_selected');
         });
-
-        $(document).ready(function() {
-        $.datepicker.regional[""].dateFormat = 'yy-mm-dd';
-        $.datepicker.setDefaults($.datepicker.regional['']);
-         } );
 
         $('#reconfWith').on('shown.bs.modal', function (e) {
             var btn = e.relatedTarget;
