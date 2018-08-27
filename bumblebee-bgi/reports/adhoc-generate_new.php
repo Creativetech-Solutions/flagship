@@ -109,10 +109,9 @@ if(strpos($selectData, '`T`')){
     $query .= ' LEFT JOIN bgi_touroperator T on R.tour_operator = T.id';
 }
 
-/*if(strpos($selectData,'`TF`')){
-    $query .= ' LEFT JOIN bgi_fsft_touroperator TF on R.tour_operator = TF.id';
-}*/
-
+if(strpos($selectData, 'Client') && strpos($selectData, '`CT`')){
+    $query .= ' LEFT JOIN bgi_fsft_touroperator CT on R.tour_operator = CT.id';
+}
 // guests
 if(strpos($selectData,'`G`')){
     $query .= ' LEFT JOIN bgi_guest G on R.ref_no_sys = G.ref_no_sys';
@@ -301,6 +300,16 @@ if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
     $query .= ')';
 }
 
+if(strpos($selectData, 'In_House') && strpos($selectData, 'Departed')){
+        $query .= ' && (R.status = 5 || R.status = 4)';
+} else {
+    if(strpos($selectData, 'In_House'))
+        $query .= ' && R.status = 5';
+
+    if(strpos($selectData, 'Departed'))
+        $query .= ' && R.status = 4';
+}
+
 //$countQuery = 'SELECT R.id  GROUP BY R.id';
 $query .= ' ORDER BY R.id';
 
@@ -365,6 +374,16 @@ if(isset($TotalRows) and $TotalRows > 0){
                     }
             }
         }
+        $ref_no_sys = $row['Ref_no_sys'];
+        $innerQuery = mysqli_query($conn, "SELECT COUNT(id) FROM bgi_departures WHERE ref_no_sys = '$ref_no_sys'");
+        $innerQuery = mysqli_fetch_row($innerQuery);
+        if($innerQuery[0] > 1){
+            $row['Mul_A/D'] = "Y";
+        }else{
+            $row['Mul_A/D'] = "N";
+        }
+        $row = array('Mul_A/D'=>$row['Mul_A/D']) + $row;
+
         // check for arrival service only  
         if(isset($row['Ref_no_sys']) && isset($row['Arrival_Service_Only'])){  
             $ref_no_sys = $row['Ref_no_sys'];
@@ -375,9 +394,9 @@ if(isset($TotalRows) and $TotalRows > 0){
             } else {
                 $row['Arrival_Service_Only'] = 'Yes';
             }
-            //unset($row['Ref_no_sys']);
+            unset($row['Ref_no_sys']);
         } else {
-            //unset($row['Ref_no_sys']);
+            unset($row['Ref_no_sys']);
             unset($row['Arrival_Service_Only']);
         }
         // check fast track 
@@ -441,6 +460,7 @@ if(isset($TotalRows) and $TotalRows > 0){
             if($row['GH'] == 1)
                 $row['GH'] = 'Y';
             else $row['GH'] = 'N';
+           if($_REQUEST['sect'] == 'fsft')
             $row = array('GH'=>$row['GH']) + $row;
         }
 
@@ -480,20 +500,27 @@ if(isset($TotalRows) and $TotalRows > 0){
                     $row['Type'] = 'GH (FSFT Checked)';
                 else $row['Type'] = 'GH';
             }
-            unset($row['GH']);
         }
+            unset($row['GH']);
 
+        if(isset($row['In_House']))
+            unset($row['In_House']);
+
+        if(isset($row['Departed']))
+            unset($row['Departed']);
         $resultData[] = $row;
 
     }
 
-   
+    /*echo "<pre>";
+    print_r($resultData);
+    exit;*/
 
     $rIds = [];
     $guestIds = [];
     $testArray = [];
     // here wo make the array of reservation and guest columns, that will use later to duplicte the main reservation
-    $reservationCols = ['GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
+    $reservationCols = ['Mul_A/D','GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
 
     $guestCols=['Guest_Title_Name','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Teen_Age','Guest_Child_Age','Guest_Infant_Age','Price','Guest_id'];
 
@@ -525,19 +552,22 @@ if(isset($TotalRows) and $TotalRows > 0){
                     }
                 }
         } else {
-            if(isset($data['Guest_id'])) array_push($guestIds, $data['Guest_id']);
-            // here code start to show main reservation twice
-            if(!in_array($data['Id'], $rIds)){
-                $repeatReservation = [];
-                foreach($currentKeys as $akey){
-                    if(in_array($akey, $reservationCols))
-                        $repeatReservation[$akey] = $data[$akey];
-                    else 
-                        $repeatReservation[$akey] = '';
-                }
-                array_push($rIds, $data['Id']);
-                $testArray[] = $repeatReservation;
-            } 
+            if(isset($data['Guest_id']) and !empty($data['Guest_id']) and $_REQUEST['sect']!='fsft')
+            {
+                array_push($guestIds, $data['Guest_id']);
+                // here code start to show main reservation twice
+                if(!in_array($data['Id'], $rIds)){
+                    $repeatReservation = [];
+                    foreach($currentKeys as $akey){
+                        if(in_array($akey, $reservationCols))
+                            $repeatReservation[$akey] = $data[$akey];
+                        else 
+                            $repeatReservation[$akey] = '';
+                    }
+                    array_push($rIds, $data['Id']);
+                    $testArray[] = $repeatReservation;
+                } 
+            }
             $testArray[$newKey] = $data; 
         }
     }

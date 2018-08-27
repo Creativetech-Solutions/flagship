@@ -77,7 +77,7 @@ $reservations = mysql_query("SELECT
    LEFT JOIN bgi_flightclass FC ON FA.flight_class = FC.id
    LEFT JOIN bgi_transport FAD ON FAD.id_transport = FA.arr_driver
    LEFT JOIN bgi_vehicles FAV ON FAV.id_vehicle = FA.arr_driver
-    WHERE R.status = 1
+    WHERE R.status != 2
    ");
 
 if(mysql_errno()){

@@ -93,7 +93,7 @@ $reservations = mysqli_query($conn , "SELECT
    LEFT JOIN bgi_transport FDD ON FDD.id_transport = FD.dpt_transport
    LEFT JOIN bgi_vehicles FDV ON FDV.id_vehicle = FD.dpt_vehicle
    LEFT JOIN bgi_flights DFN ON DFN.id_flight = FD.dpt_flight_no
-    WHERE R.status = 1
+    WHERE R.status != 2
    ");
 
 

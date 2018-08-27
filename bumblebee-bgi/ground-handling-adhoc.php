@@ -151,6 +151,20 @@ else {
                             <div class="row">
                                 <h4>Select Options</h4>
                                 <div class="col-md-4">
+                                    <div class="col-xs-12 marginBotBox guestOptions">
+                                        <h4><strong>Report Type</strong></h4>
+                                        <label for="selectAllActivities"><input type="checkbox" class="selectAllCheckboxes">Select All</label>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.guest_status::In_House" <?=in_array('R.guest_status::In_House', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>In House</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.guest_status::Departed" <?=in_array('R.guest_status::Departed', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>Departed</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
                                     <div class="col-xs-12 marginBotBox">
                                         <h4><strong>Reservation Information</strong></h4>
                                         <label for="selectAllPersonalInformationCheckbox"><input type="checkbox" class="selectAllCheckboxes" id="selectAllPersonalInformationCheckbox">Select All</label>
@@ -271,7 +285,7 @@ else {
                                         <label for="selectAllActivities"><input type="checkbox" class="selectAllCheckboxes" id="selectAllActivities">Select All</label>
                                         <ul class="list-group">
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.G.title_name::Guest_Title_Name" <?=in_array('R.G.title_name::Guest_Title_Name', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <input type="checkbox" value="1" name="R.G.title_name::Guest_Title" <?=in_array('R.G.title_name::Guest_Title', $selectedCheckBoxesNames)?'checked':''?>/>
                                                 <strong>Title Name</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -295,11 +309,11 @@ else {
                                                 <strong>Teen</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.G.child_age::Guest_Child_Age" <?=in_array('R.G.child_age::Guest_Child_Age', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <input type="checkbox" value="1" name="R.G.child_age::Child_Age" <?=in_array('R.G.child_age::Child_Age', $selectedCheckBoxesNames)?'checked':''?>/>
                                                 <strong>Child</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.G.infant_age::Guest_Infant_Age" <?=in_array('R.G.infant_age::Guest_Infant_Age', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.G.infant_age::Inf_Age" <?=in_array('R.G.infant_age::Inf_Age', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Infant</strong>
                                             </li>
                                             <?php if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all'){ ?>
@@ -336,7 +350,7 @@ else {
                                                 <strong>Time</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.FCA.class::Arr_Flight_Class" <?=in_array('R.FCA.class::Arr_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.FCA.class::Class" <?=in_array('R.FCA.class::Class', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Flight Class</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -388,15 +402,15 @@ else {
                                                 <strong>Booster Seats</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.vouchers::Arr_Vouchers" <?=in_array('R.A.vouchers::Arr_Vouchers', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.A.vouchers::AV" <?=in_array('R.A.vouchers::AV', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Vouchers</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.cold_towel::Arr_Cold_Towel" <?=in_array('R.A.cold_towel::Arr_Cold_Towel', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.A.cold_towel::ACT" <?=in_array('R.A.cold_towel::ACT', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Cold Towel</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.bottled_water::Arr_Bottled_Water" <?=in_array('R.A.bottled_water::Arr_Bottled_Water', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.A.bottled_water::ABW" <?=in_array('R.A.bottled_water::ABW', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Bottled Water</strong>
                                             </li>
                                             <li class="list-group-item">

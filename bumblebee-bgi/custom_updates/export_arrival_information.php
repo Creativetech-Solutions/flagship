@@ -23,7 +23,7 @@ header("Expires: 0");
 
 $conn = mysqli_connect('localhost','root','chocolate','cocoa_bgi');
 
-$arrivalConfirmations = "SELECT * FROM bgi_reservations WHERE status = 1";
+$arrivalConfirmations = "SELECT * FROM bgi_reservations WHERE status != 2";
 $reservations = mysqli_query($conn ,$arrivalConfirmations);
 if(mysqli_errno($conn)){
     echo mysqli_error($conn);

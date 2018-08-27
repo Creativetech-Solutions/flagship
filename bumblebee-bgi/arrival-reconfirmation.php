@@ -30,7 +30,7 @@ $offset = ($page*10) - 10;
 
 
 //Grab all reservation info
-$arrivalConfirmations = "SELECT SQL_CALC_FOUND_ROWS * FROM bgi_reservations WHERE status = 1";
+$arrivalConfirmations = "SELECT SQL_CALC_FOUND_ROWS * FROM bgi_reservations WHERE status != 2";
 
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];

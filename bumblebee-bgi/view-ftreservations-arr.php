@@ -24,7 +24,7 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM bgi_reservations R INNER JOIN bgi_arrivals A on R.ref_no_sys = A.ref_no_sys WHERE (R.fast_track = 1 OR A.fast_track = 1) AND R.status = 1";
+$reservationQuery = "SELECT * FROM bgi_reservations R INNER JOIN bgi_arrivals A on R.ref_no_sys = A.ref_no_sys WHERE (R.fast_track = 1 OR A.fast_track = 1) AND R.status != 2";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];

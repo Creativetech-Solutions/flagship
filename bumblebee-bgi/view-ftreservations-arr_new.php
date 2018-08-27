@@ -34,7 +34,7 @@ else
 $offset = ($page*10) - 10;
 //Grab all reservation info
 
-$reservationQuery = "FROM bgi_reservations R WHERE (R.`ref_no_sys` IN (SELECT ref_no_sys FROM bgi_arrivals WHERE fast_track = 1 ) OR R.fast_track = 1) AND R.status = 1";
+$reservationQuery = "FROM bgi_reservations R WHERE (R.`ref_no_sys` IN (SELECT ref_no_sys FROM bgi_arrivals WHERE fast_track = 1 ) OR R.fast_track = 1) AND R.status != 2";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];

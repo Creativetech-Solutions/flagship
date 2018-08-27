@@ -48,7 +48,7 @@ $reservations = mysql_query("SELECT
    LEFT JOIN bgi_flights ON bgi_flights.id_flight = R.arr_flight_no
    LEFT JOIN bgi_flighttime ON bgi_flighttime.id_fltime = R.arr_time
    LEFT JOIN bgi_flightclass ON bgi_flightclass.id = R.flight_class
-    WHERE R.status = 1
+    WHERE R.status != 2
    ");
 
 if(mysql_errno()){

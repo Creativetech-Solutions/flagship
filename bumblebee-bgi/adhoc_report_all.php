@@ -157,7 +157,7 @@ else {
                                                 foreach($resultData as $row){
                                                     echo '<tr>';
                                                     foreach($row as $column){
-                                                        echo '<td>'.$column.'</td>';
+                                                        echo '<td>'.ucwords($column).'</td>';
                                                     }  
                                                     echo '</tr>';                                                  
                                                 }

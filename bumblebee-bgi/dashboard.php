@@ -20,7 +20,7 @@ include_once('header.php');
 site_header('Dashboard');
 
 //Grab all reservation info
-$res = mysql_query("SELECT * FROM bgi_reservations WHERE arr_date >= DATE(NOW()) AND status = 1");
+$res = mysql_query("SELECT * FROM bgi_reservations WHERE arr_date >= DATE(NOW()) AND status != 2");
 $res_count = mysql_num_rows($res);
 
 $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= DATE(NOW())");

@@ -5,7 +5,7 @@
  * @copyright 2015
  */
 
-$ftrows = mysql_query("SELECT ftnotify FROM bgi_reservations WHERE ftnotify = 1 AND status = 1");
+$ftrows = mysql_query("SELECT ftnotify FROM bgi_reservations WHERE ftnotify = 1 AND status != 2");
 if($ftrows){
 $ft_count = mysql_num_rows($ftrows);
 } else {

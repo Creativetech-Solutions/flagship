@@ -9,7 +9,7 @@
 
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM bgi_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status != 2";
 if(isset($_POST['name']) && !empty($_POST)){
     if(!empty($_POST['name']))
     	$reservationQuery .= " AND (first_name = '".$_POST['name']."' OR last_name = '".$_POST['name']."' OR tour_ref_no = '".$_POST['name']."' OR ref_no_sys = '".$_POST['name']."')";

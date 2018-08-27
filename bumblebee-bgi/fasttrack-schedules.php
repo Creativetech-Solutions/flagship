@@ -22,7 +22,7 @@ site_header('Fast Track Assignments');
 
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM bgi_reservations WHERE status = 1 AND fast_track = 1 AND assigned = 1";
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE status != 2 AND fast_track != 2 AND assigned = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];

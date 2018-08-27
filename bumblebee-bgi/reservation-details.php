@@ -279,6 +279,8 @@ if(isset($_POST['update']))
                                                     <select class="form-control form-inline" id="res-status" name="res_status">
                                                         <option value="2" <?php echo ($reservation[43] == 2) ? 'selected' : ''; ?>>Cancelled</option>
                                                         <option value="1" <?php echo ($reservation[43] == 1) ? 'selected' : ''; ?>>Active</option>    
+                                                        <option value="in_house" <?php echo ($reservation[76] == 'In House') ? 'selected' : ''; ?>>In House</option>   
+                                                        <option value="departed" <?php echo ($reservation[76] == 'Departed') ? 'selected' : ''; ?>>Departed</option>    
                                                     </select>
                                                 </label>
                                                 <button class="btn btn-default left20" onclick="goBack()" type="button">Exit</button>

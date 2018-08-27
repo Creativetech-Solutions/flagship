@@ -17,7 +17,7 @@ include('header.php');
 site_header('Arrival Flight');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM bgi_reservations WHERE (fast_track = 1 OR ftnotify = 1) AND status = 1";
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE (fast_track = 1 OR ftnotify = 1) AND status != 2";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];

@@ -21,7 +21,7 @@ site_header('Reservation Assignments');
 //$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND assigned = 1");
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM bgi_reservations WHERE status = 1 AND assigned = 1";
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE status != 2 AND assigned = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];

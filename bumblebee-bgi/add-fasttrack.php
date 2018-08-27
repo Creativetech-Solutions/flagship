@@ -242,17 +242,19 @@ if (isset($_POST['addreservation'])) {
     }
     $guestsArray = array();
     foreach ($guestFirstName as $key => $val) {
-        $arrayToPush = array(
-            'guestTitle' => $guestTitleName[$key],
-            'guestFirstName' => $guestFirstName[$key],
-            'guestLastName' => $guestLastName[$key],
-            'guestAdult' => @$guestAdult[$key],
-            'guestChildAge' => @$guestChildAge[$key],
-            'guestTeenAge' => @$guestTeenAge[$key],
-            'guestInfantAge' => $guestInfantAge[$key],
-            'guestPNR' => $guestPNR[$key]
-        );
-        array_push($guestsArray, $arrayToPush);
+        if (!empty($guestTitleName[$key]) || !empty($guestFirstName[$key]) || !empty($guestLastName[$key])){
+            $arrayToPush = array(
+                'guestTitle' => $guestTitleName[$key],
+                'guestFirstName' => $guestFirstName[$key],
+                'guestLastName' => $guestLastName[$key],
+                'guestAdult' => $guestAdult[$key],
+                'guestChildAge' => $guestChildAge[$key],
+                'guestTeenAge' => $guestTeenAge[$key],
+                'guestInfantAge' => $guestInfantAge[$key],
+                'guestPNR' => $guestPNR[$key]
+            );
+            array_push($guestsArray, $arrayToPush);
+        }
     }
 //    print_r($guestsArray);
     $user_action = "add new fast track reservation:  $title_name. $first_name $last_name #ref:$fsref";

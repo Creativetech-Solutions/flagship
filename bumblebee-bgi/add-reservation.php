@@ -840,21 +840,23 @@ if(isset($_POST['addreservation']))
             $guestCell = '';
             $guestEmail = '';
         } 
-        $arrayToPush = array(
-            'guestTitle' => $guestTitleName[$key],
-            'guestFirstName' => $guestFirstName[$key],
-            'guestLastName' => $guestLastName[$key],
-            'guestAdult' => @$guestAdult[$key],
-            'guestCell' => $guestCell,
-            'guestEmail' => $guestEmail,
-            'guestChildAge' => @$guestChildAge[$key],
-            'guestTeenAge' => @$guestTeenAge[$key],
-            'guestInfantAge' => $guestInfantAge[$key],
-            'guestPNR' => $guestPNR[$key]
-        );
+        if (!empty($guestTitleName[$key]) || !empty($guestFirstName[$key]) || !empty($guestLastName[$key]) || !empty($guestCell[$key]) || !empty($guestEmail[$key])){
+            $arrayToPush = array(
+                'guestTitle' => $guestTitleName[$key],
+                'guestFirstName' => $guestFirstName[$key],
+                'guestLastName' => $guestLastName[$key],
+                'guestAdult' => $guestAdult[$key],
+                'guestCell' => $guestCell,
+                'guestEmail' => $guestEmail,
+                'guestChildAge' => $guestChildAge[$key],
+                'guestTeenAge' => $guestTeenAge[$key],
+                'guestInfantAge' => $guestInfantAge[$key],
+                'guestPNR' => $guestPNR[$key]
+            );
+            array_push($guestsArray,$arrayToPush);
+            $guestCounter += 1;
+        }
 
-        array_push($guestsArray,$arrayToPush);
-        $guestCounter += 1;
     }
 
     
@@ -878,7 +880,7 @@ if(isset($_POST['addreservation']))
 
 
     //Now Just Loop the GUests the the guests table
-
+  
     if(!empty($guestsArray)){
         foreach($guestsArray as $guest){
             $sqlGuestQuery = "INSERT INTO bgi_guest ".

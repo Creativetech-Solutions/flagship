@@ -1,0 +1,290 @@
+DELETE  
+FROM
+  bgi_guest 
+WHERE title_name = '' 
+  AND first_name = '' 
+  AND last_name = '' 
+  AND email = '' 
+  AND cell = '' 
+  AND adult = 0 
+  AND teen_age = 0 
+  AND infant_age = 0 
+  AND child_age = 0 
+  
+
+COLUMN_NAME
+id
+fr.title_name,
+fr.first_name,
+fr.last_name,
+fr.pnr,
+fr.tour_operator,
+fr.operator_code,
+fr.tour_ref_no,
+fr.adult,
+fr.child,
+fr.infant,
+fr.tour_notes,
+fr.fast_track,
+fr.affiliates,
+fr.arr_date,
+fr.arr_time,
+fr.arr_flight_no,
+fr.flight_class,
+fr.arr_transport,
+fr.arr_driver,
+fr.arr_vehicle,
+fr.arr_pickup,
+fr.arr_dropoff,
+fr.room_type,
+fr.rep_type,
+fr.client_reqs,
+fr.dpt_date,
+fr.dpt_time,
+fr.dpt_flight_no,
+fr.dpt_transport,
+fr.dpt_driver,
+fr.dpt_vehicle,
+fr.dpt_pickup,
+fr.dpt_dropoff,
+fr.dpt_pickup_time,
+fr.dpt_notes,
+fr.creation_date,
+fr.created_by,
+fr.modified_date,
+fr.modified_by,
+fr.ref_no_sys,
+fr.assigned,
+fr.rep,
+fr.status,
+fr.arr_transport_notes,
+fr.dpt_transport_notes,
+fr.arr_hotel_notes,
+fr.ftnotify,
+fr.infant_seats,
+fr.child_seats,
+fr.booster_seats,
+fr.vouchers,
+fr.assignment,
+fr.cold_towel,
+fr.bottled_water,
+fr.dpt_flight_class,
+fr.rooms,
+fr.room_no,
+fr.date_reconfirmed,
+fr.reconf_with,
+fr.total_guests,
+fr.luggage_vehicle,
+fr.fast_ref_no_sys,
+fr.payment_type,
+fr.payment_amount,
+fr.sup_total_amount,
+fr.sup_per_person,
+fr.dpt_vouchers,
+fr.dpt_cold_towel,
+fr.dpt_bottled_water,
+fr.hotel_rep,
+fr.hotel_id,
+fr.dpt_infant_seats,
+fr.dpt_child_seats,
+fr.dpt_booster_seats,
+fr.dpt_client_reqs,
+fr.guest_status,
+
+
+INSERT INTO test_cocoa_bgi.bgi_reservations
+SELECT NULL,
+  fr.title_name,
+  fr.first_name,
+  fr.last_name,
+  fr.pnr,
+  fr.tour_operator,
+  fr.operator_code,
+  fr.tour_ref_no,
+  fr.adult,
+  fr.child,
+  fr.infant,
+  fr.tour_notes,
+  fr.fast_track,
+  fr.affiliates,
+  fr.arr_date,
+  fr.arr_time,
+  fr.arr_flight_no,
+  fr.flight_class,
+  fr.arr_transport,
+  fr.arr_driver,
+  fr.arr_vehicle,
+  fr.arr_pickup,
+  fr.arr_dropoff,
+  fr.room_type,
+  fr.rep_type,
+  fr.client_reqs,
+  fr.dpt_date,
+  fr.dpt_time,
+  fr.dpt_flight_no,
+  fr.dpt_transport,
+  fr.dpt_driver,
+  fr.dpt_vehicle,
+  fr.dpt_pickup,
+  fr.dpt_dropoff,
+  fr.dpt_pickup_time,
+  fr.dpt_notes,
+  fr.creation_date,
+  fr.created_by,
+  fr.modified_date,
+  fr.modified_by,
+  fr.ref_no_sys,
+  fr.assigned,
+  fr.rep,
+  fr.status,
+  fr.arr_transport_notes,
+  fr.dpt_transport_notes,
+  fr.arr_hotel_notes,
+  fr.ftnotify,
+  fr.infant_seats,
+  fr.child_seats,
+  fr.booster_seats,
+  fr.vouchers,
+  fr.assignment,
+  fr.cold_towel,
+  fr.bottled_water,
+  fr.dpt_flight_class,
+  fr.rooms,
+  fr.room_no,
+  fr.date_reconfirmed,
+  fr.reconf_with,
+  fr.total_guests,
+  fr.luggage_vehicle,
+  fr.fast_ref_no_sys,
+  fr.payment_type,
+  fr.payment_amount,
+  fr.sup_total_amount,
+  fr.sup_per_person,
+  fr.dpt_vouchers,
+  fr.dpt_cold_towel,
+  fr.dpt_bottled_water,
+  fr.hotel_rep,
+  fr.hotel_id,
+  fr.dpt_infant_seats,
+  fr.dpt_child_seats,
+  fr.dpt_booster_seats,
+  fr.dpt_client_reqs,
+  fr.guest_status
+FROM
+  test_cocoa_fll.bgi_reservations fr 
+  LEFT JOIN test_cocoa_bgi.bgi_reservations br 
+    ON fr.tour_ref_no = br.tour_ref_no 
+    AND br.tour_ref_no != '' 
+WHERE fr.id > 5902 
+  AND br.tour_ref_no IS NULL
+
+
+
+  COLUMN_NAME
+id
+fa.ref_no_sys,
+fa.arr_date,
+fa.arr_time,
+fa.arr_flight_no,
+fa.flight_class,
+fa.arr_transport,
+fa.arr_driver,
+fa.arr_vehicle,
+fa.arr_pickup,
+fa.arr_dropoff,
+fa.room_type,
+fa.rep_type,
+fa.client_reqs,
+fa.arr_transport_notes,
+fa.arr_hotel_notes,
+fa.infant_seats,
+fa.child_seats,
+fa.booster_seats,
+fa.vouchers,
+fa.cold_towel,
+fa.bottled_water,
+fa.rooms,
+fa.room_no,
+fa.arr_main,
+fa.luggage_vehicle,
+fa.fast_track,
+fa.excursion_name,
+fa.excursion_date,
+fa.excursion_pickup,
+fa.excursion_confirm_by,
+fa.excursion_confirm_date,
+fa.excursion_guests,
+fa.arr_rooms,
+fa.room_last_name,
+fa.luggage_vehicle_id,
+
+
+
+COLUMN_NAME
+id
+fd.ref_no_sys,
+fd.dpt_date,
+fd.dpt_time,
+fd.dpt_flight_no,
+fd.flight_class,
+fd.dpt_transport,
+fd.dpt_driver,
+fd.dpt_vehicle,
+fd.dpt_pickup,
+fd.dpt_dropoff,
+fd.dpt_pickup_time,
+fd.dpt_notes,
+fd.dpt_transport_notes,
+fd.dpt_main,
+fd.dpt_jet_center,
+fd.fast_track,
+fd.dpt_vouchers,
+fd.dpt_cold_towel,
+fd.dpt_bottled_water,
+fd.dpt_infant_seats,
+fd.dpt_child_seats,
+fd.dpt_booster_seats,
+fd.dpt_client_reqs
+
+
+COLUMN_NAME
+id
+fg.title_name,
+fg.ref_no_sys,
+fg.first_name,
+fg.last_name,
+fg.adult,
+fg.child_age,
+fg.infant_age,
+fg.pnr,
+fg.email,
+fg.cell,
+fg.teen_age
+
+
+COLUMN_NAME
+id
+fat.arrival_id,
+fat.transport_mode,
+fat.vehicle,
+fat.driver,
+fat.luggage_vehicle,
+
+
+INSERT INTO test_cocoa_bgi.bgi_arrivals_transports
+SELECT NULL,
+  fa.id as arrival_Actual_Id,
+  fat.transport_mode,
+  fat.vehicle,
+  fat.driver,
+  fat.luggage_vehicle
+from
+  test_cocoa_fll.bgi_reservations fr 
+  INNER JOIN test_cocoa_bgi.bgi_arrivals fa 
+    ON fa.ref_no_sys = fr.ref_no_sys 
+  INNER JOIN test_cocoa_fll.bgi_arrivals faa 
+    ON faa.ref_no_sys = fr.ref_no_sys 
+  INNER JOIN test_cocoa_fll.bgi_arrivals_transports fat 
+    ON faa.id = fat.arrival_id 
+    AND fr.id > 5902 
+    AND fr.id NOT IN (5934, 5942, 5956)
