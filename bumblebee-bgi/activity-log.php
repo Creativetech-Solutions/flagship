@@ -37,11 +37,11 @@ $log = mysql_query("SELECT * FROM bgi_activity");
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Administrator</li>
                     <li class="active"><a href="activity-log.php">Activity Logs</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->

@@ -60,12 +60,12 @@ if(mysql_errno()){
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li><a href="#">Reservations</a></li>
                     <li><a href="#">Team Assignment</a></li>
                     <li class="active">Reservation Assignments</li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
 
                 <!-- PAGE TITLE -->

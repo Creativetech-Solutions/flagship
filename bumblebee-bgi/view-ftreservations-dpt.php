@@ -72,11 +72,11 @@ if(mysql_errno()){
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Fast Track</li>
                     <li class="active"><a href="view-reservations-dpt.php">View FSFT Reservations - Departures</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->

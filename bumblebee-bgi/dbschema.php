@@ -28,11 +28,11 @@ site_header('Database Schema');
             <div class="page-content">                     
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="#">Home</a></li>                    
                     <li>Developer</li>
                     <li class="active"><a href="table-reader.php">DB Schema</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->                       
                 
                 <!-- PAGE CONTENT WRAPPER -->

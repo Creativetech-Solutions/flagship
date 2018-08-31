@@ -265,7 +265,12 @@ if(isset($_POST['update']))
                                                 <div class="widget-title">System Info</div>
                                                 <div class="widget-subtitle"><strong>Reference#: <?php echo $reservation[40]; ?></strong></div>
                                                 <div class="widget-subtitle">
-                                                    Status: <?php echo ($reservation[43]< 2) ? '<span class="label label-info">Active</span>' : '<span class="label label-danger">Cancelled</span>'; ?>
+                                                    Status: <?php 
+                                                    if($reservation[43] == 1)  echo '<span class="label label-info">Active</span>';
+                                                    else if($reservation[43] == 2) echo '<span class="label label-danger">Cancelled</span>'; 
+                                                    else if($reservation[43] == 5) echo '<span class="label label-primary">In House</span>'; 
+                                                    else if($reservation[43] == 4) echo '<span class="label label-warning">Departed</span>'; 
+                                                    ?>
                                                     <div class="clearfix"></div>
                                                     Created: <?php echo $reservation[36]; ?><br />
                                                     Created by: <?php echo $reservation[37]; ?><br />
@@ -278,9 +283,9 @@ if(isset($_POST['update']))
                                                 <label>Reservation Status:
                                                     <select class="form-control form-inline" id="res-status" name="res_status">
                                                         <option value="2" <?php echo ($reservation[43] == 2) ? 'selected' : ''; ?>>Cancelled</option>
-                                                        <option value="1" <?php echo ($reservation[43] == 1) ? 'selected' : ''; ?>>Active</option>    
-                                                        <option value="in_house" <?php echo ($reservation[76] == 'In House') ? 'selected' : ''; ?>>In House</option>   
-                                                        <option value="departed" <?php echo ($reservation[76] == 'Departed') ? 'selected' : ''; ?>>Departed</option>    
+                                                        <option value="1" <?php echo ($reservation[43] == 1) ? 'selected' : ''; ?>>Active</option>  
+                                                        <option value="5" <?php echo ($reservation[43] == 5) ? 'selected' : ''; ?>>In House</option>   
+                                                        <option value="4" <?php echo ($reservation[43] == 4) ? 'selected' : ''; ?>>Departed</option>    
                                                     </select>
                                                 </label>
                                                 <button class="btn btn-default left20" onclick="goBack()" type="button">Exit</button>

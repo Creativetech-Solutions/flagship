@@ -308,12 +308,12 @@ if(isset($_POST['update']))
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+           <!--      <ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Reservations</li>
                     <li><a href="view-reservations-arr.php">View Reservations</a></li>
                     <li class="active"><a href="reservation-details.php?id=<?php echo $reservation_id; ?>">Reservation - <?php echo $reservation[1]; ?></a></li>
-                </ul>
+                </ul> -->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE CONTENT WRAPPER -->

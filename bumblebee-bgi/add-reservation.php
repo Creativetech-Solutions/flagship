@@ -2304,11 +2304,11 @@ if(isset($_POST['addreservation']))
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li><a href="#">Reservations</a></li>
                     <li class="active">Add Reservation</li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE CONTENT WRAPPER -->

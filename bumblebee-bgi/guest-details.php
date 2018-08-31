@@ -84,13 +84,13 @@ ob_end_flush();
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+              <!--   <ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Reservations</li>
                     <li><a href="view-reservations.php">View Reservations</a></li>
                     <li><a href="reservation-details.php?id=<?php echo $reservation_id; ?>">Reservation - <?php echo $ref_no; ?></a></li>
                     <li class="active"><a href="guest-details.php?id=<?php echo $guest_id; ?>">Guest - <?php echo $guest[1]; ?>. <?php echo $guest[3]; ?> <?php echo $guest[4]; ?></a></li>
-                </ul>
+                </ul> -->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE CONTENT WRAPPER -->

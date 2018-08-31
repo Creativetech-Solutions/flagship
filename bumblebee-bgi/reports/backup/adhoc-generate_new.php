@@ -259,12 +259,12 @@ if(strpos($selectData, '`AH`') || strpos($selectData, 'Additional_Hotel') || str
 
 
 if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){ 
-    $query .= ' WHERE (R.fast_track=1 || R.ftnotify=1) && R.status=1';
+    $query .= ' WHERE (R.fast_track=1 || R.ftnotify=1) && R.status!=2';
 } elseif(isset($_REQUEST['sect']) && $_REQUEST['sect']=='gh') {
     $_REQUEST['sect'] = 'gh';
-    $query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status=1';
+    $query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status!=2';
 } else {
-    $query .= ' WHERE R.status=1';
+    $query .= ' WHERE R.status!=2';
 }
 
 
@@ -301,13 +301,13 @@ if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
 }
 
 if(strpos($selectData, 'In_House') && strpos($selectData, 'Departed')){
-        $query .= ' && (R.guest_status = "In House" || R.guest_status = "Departed")';
+        $query .= ' && (R.status = 5 || R.status = 4)';
 } else {
     if(strpos($selectData, 'In_House'))
-        $query .= ' && R.guest_status = "In House"';
+        $query .= ' && R.status = 5';
 
     if(strpos($selectData, 'Departed'))
-        $query .= ' && R.guest_status = "Departed"';
+        $query .= ' && R.status = 4';
 }
 
 //$countQuery = 'SELECT R.id  GROUP BY R.id';
@@ -552,19 +552,22 @@ if(isset($TotalRows) and $TotalRows > 0){
                     }
                 }
         } else {
-            if(isset($data['Guest_id'])) array_push($guestIds, $data['Guest_id']);
-            // here code start to show main reservation twice
-            if(!in_array($data['Id'], $rIds)){
-                $repeatReservation = [];
-                foreach($currentKeys as $akey){
-                    if(in_array($akey, $reservationCols))
-                        $repeatReservation[$akey] = $data[$akey];
-                    else 
-                        $repeatReservation[$akey] = '';
-                }
-                array_push($rIds, $data['Id']);
-                $testArray[] = $repeatReservation;
-            } 
+            if(isset($data['Guest_id']) and !empty($data['Guest_id']) and $_REQUEST['sect']!='fsft')
+            {
+                array_push($guestIds, $data['Guest_id']);
+                // here code start to show main reservation twice
+                if(!in_array($data['Id'], $rIds)){
+                    $repeatReservation = [];
+                    foreach($currentKeys as $akey){
+                        if(in_array($akey, $reservationCols))
+                            $repeatReservation[$akey] = $data[$akey];
+                        else 
+                            $repeatReservation[$akey] = '';
+                    }
+                    array_push($rIds, $data['Id']);
+                    $testArray[] = $repeatReservation;
+                } 
+            }
             $testArray[$newKey] = $data; 
         }
     }

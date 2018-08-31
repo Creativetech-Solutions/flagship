@@ -28,11 +28,11 @@ site_header('News Manager');
             <div class="page-content">                     
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="#">Home</a></li>                    
                     <li>Administrator</li>
                     <li class="active"><a href="news.php">News Manager</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->                       
                 
                 <!-- PAGE CONTENT WRAPPER -->

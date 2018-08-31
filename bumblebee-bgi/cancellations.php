@@ -52,11 +52,11 @@ $reservations = mysql_query($query);
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Reports</li>
                     <li class="active"><a href="view-cancellations.php">View Cancellations</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->

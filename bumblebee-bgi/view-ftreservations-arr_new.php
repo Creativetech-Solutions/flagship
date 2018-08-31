@@ -146,11 +146,11 @@ if(isset($totalRows[0]))
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Fast Track</li>
                     <li class="active"><a href="view-ftreservations-arr.php">View FSFT Reservations - Arrivals</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->

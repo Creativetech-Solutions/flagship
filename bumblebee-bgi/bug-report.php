@@ -96,17 +96,17 @@ ob_end_flush();
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     
-                    <?php if ($user->is_Admin()) : ?>
+                    <?php /*if ($user->is_Admin()) : */?>
                     <li>Developer</li>                                        
                     <li class="active"><a href="bug-report.php">Bug Reports</a></li>
-                    <?php else: ?> 
+                    <?php /*else: */?>
                     <li>Reports</li>                    
                     <li class="active"><a href="bug-report.php">Report a bug</a></li>
-                    <?php endif; ?>                    
-                </ul>
+                    <?php /*endif; */?>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->

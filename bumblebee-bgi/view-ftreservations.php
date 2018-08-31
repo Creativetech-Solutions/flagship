@@ -55,11 +55,11 @@ site_header('Fast track Reservation List');
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+               <!-- <ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Reservations</li>
                     <li class="active"><a href="view-reservations.php">View Reservations</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->

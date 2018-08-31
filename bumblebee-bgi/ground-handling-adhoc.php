@@ -97,11 +97,11 @@ else {
 <div class="page-content">
     <?php include('vert-navigation.php'); ?>
     <!-- START BREADCRUMB -->
-    <ul class="breadcrumb">
+    <!--<ul class="breadcrumb">
         <li><a href="dashboard.php">Home</a></li>
         <li>Ground Handling</li>
         <li class="active">Add Hoc Report</li>
-    </ul>
+    </ul>-->
     <!-- END BREADCRUMB -->
 
     <!-- PAGE CONTENT WRAPPER -->
@@ -226,6 +226,7 @@ else {
                                                     <input type="checkbox" value="1" id="tour_operator" name="R.T.tour_operator::Tour_Operator" <?=in_array('R.T.tour_operator::Tour_Operator', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Tour Operator</strong>
                                                 </li>
+                                            <?php } if($_REQUEST['sect'] == 'gh'){?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" id="operator_code" name="R.operator_code::Operator_Code" <?=in_array('R.operator_code::Operator_Code', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Operator Code/Brand</strong>
@@ -251,7 +252,15 @@ else {
                                                         <input class="a_c_i" type="checkbox" value="1" id="infant" name="R.infant::Infant" <?=in_array('R.infant::Infant', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong># of Infants</strong>
                                                 </li>
-                                                       
+                                                      
+
+                                            <?php if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all'){ ?>
+                                             
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" id="hotel_id" name="R.HL.name::Hotel" <?=in_array('R.HL.name::Hotel', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Hotel</strong>
+                                                </li>
+                                            <?php } ?>
                                                 <li class="list-group-item">
                                                         <input type="checkbox" value="1" id="tour_notes" name="R.tour_notes::Tour_Notes" <?=in_array('R.tour_notes::Tour_Notes', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Rep Notes</strong>
@@ -586,12 +595,6 @@ else {
                                                     <input type="checkbox" value="1" name="R.I.pickup_time::Inter_Hotel_Pickup_Time" <?=in_array('R.I.pickup_time::Inter_Hotel_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup Time</strong>
                                                 </li>
-                                                <?php /* ?>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.I.pickup::Pickup_Location" <?=in_array('R.I.pickup::Pickup_Location', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Transport Mode</strong>
-                                                </li>
-                                                <?php */ ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.IL.name::Inter_Hotel_Dropoff_Location" <?=in_array('R.IL.name::Inter_Hotel_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Dropoff Location</strong>
@@ -721,8 +724,30 @@ else {
                                                     <input type="checkbox" value="1" name="R.D.dpt_jet_center::Dept_Jet_Center" <?=in_array('R.D.dpt_jet_center::Dept_Jet_Center', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Jet Center</strong>
                                                 </li>
+
+
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.D.dpt_client_reqs::Dpt_Add_Reqs" <?=in_array('R.D.dpt_client_reqs::Dpt_Add_Reqs', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Additional Requirements</strong>
+                                            </li>
                                                 <?php
-                                                    if($_REQUEST['sect']  == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
+                                                    if($_REQUEST['sect']  == 'fsft' || $_REQUEST['sect'] == 'all'){ ?>
+
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.D.dpt_infant_seats::Dpt_Infant_Seats" <?=in_array('R.D.dpt_infant_seats::Dpt_Infant_Seats', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Infant Seats</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.D.dpt_child_seats::Dpt_Child_Seats" <?=in_array('R.D.dpt_child_seats::Dpt_Child_Seats', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Child Seats</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.D.dpt_booster_seats::Dpt_Booster_Seats" <?=in_array('R.D.dpt_booster_seats::Dpt_Booster_Seats', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Booster Seats</strong>
+                                            </li>
+
+                                            <?php }?> 
+
                                                      <li class="list-group-item">
                                                         <input type="checkbox" value="1" name="R.D.dpt_vouchers::Dept_Voucher" <?=in_array('R.D.dpt_vouchers::Dept_Voucher', $selectedCheckBoxesNames)?'checked':''?> />
                                                         <strong>Voucher</strong>
@@ -735,16 +760,12 @@ else {
                                                         <input type="checkbox" value="1" name="R.D.dpt_bottled_water::Dept_Bottled_Water" <?=in_array('R.D.dpt_bottled_water::Dept_Bottled_Water', $selectedCheckBoxesNames)?'checked':''?> />
                                                         <strong>Bottled Water</strong>
                                                     </li>
-                                                   <?php }
-                                                 ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.dpt_notes::Accounting_Notes" <?=in_array('R.dpt_notes::Accounting_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Accounting Notes</strong>
                                                 </li>
                                             </ul>
                                     </div>
-
-
                                     <?php if($_REQUEST['sect'] == 'gh' || $_REQUEST['sect'] == 'all'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
                                         <h4><strong>Additional Departure Transfer</strong></h4>

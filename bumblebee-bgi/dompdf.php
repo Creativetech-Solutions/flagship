@@ -23,12 +23,12 @@ include('header.php');
 	    $reservations = mysql_query("SELECT * FROM bgi_reservations as res
 	    left join bgi_arrivals as arr on res.arr_flight_no = arr.id
 	    left join bgi_departures as dep on res.arr_flight_no = dep.id
-	    WHERE res.fast_track = 0 && res.status=1");
+	    WHERE res.fast_track = 0 && res.status!=2");
 	} else {
 	    $reservations = mysql_query("SELECT * FROM bgi_reservations as res
 	    left join bgi_arrivals as arr on res.arr_flight_no = arr.id
 	    left join bgi_departures as dep on res.arr_flight_no = dep.id
-	    WHERE res.fast_track = 1 && res.status=1");
+	    WHERE res.fast_track = 1 && res.status!=2");
 	}
 		
 

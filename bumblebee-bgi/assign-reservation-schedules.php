@@ -149,12 +149,12 @@ if($_POST){
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
                 <!-- START BREADCRUMB -->
-                <ul class="breadcrumb">
+                <!--<ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
                     <li>Reservations</li>
                     <li>Team Assignment</li>                    
                     <li class="active"><a href="assign-reservation-schedules.php">Assign</a></li>
-                </ul>
+                </ul>-->
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->
@@ -448,7 +448,7 @@ if($_POST){
             if(tourOperator){
                 postFilterData.tourOperator = tourOperator;
             }
-            var postURL = "<?=$url?>/assign-reservation-schedules.php";*/
+            var postURL = "/assign-reservation-schedules.php";*/
             
            //$.redirect(postURL,postFilterData,'POST', _SELF);
         });
@@ -474,7 +474,7 @@ if($_POST){
             };
             console.log(postData);
 //            return;
-            var postURL = "<?=$url?>/assign-reservation-schedules.php";
+            var postURL = "/assign-reservation-schedules.php";
             $.redirect(postURL,postData,'POST','_SELF');*/
            // $('.assign-rep-form')[0].submit();
         });

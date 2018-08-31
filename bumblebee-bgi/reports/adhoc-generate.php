@@ -295,9 +295,8 @@ if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
     
     $fromDate = $_REQUEST['fromDate'];
     $toDate = $_REQUEST['toDate'];
-
-    if($fromDate != $toDate)
-        $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
+    //if($fromDate != $toDate)
+    $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
 }
 if(strpos($selectData, 'In_House') && strpos($selectData, 'Departed')){
         $query .= ' && (R.status = 5 || R.status = 4)';
@@ -525,7 +524,20 @@ if(isset($TotalRows) and $TotalRows > 0){
     $guestIds = [];
     $testArray = [];
     // here wo make the array of reservation and guest columns, that will use later to duplicte the main reservation
-    $reservationCols = ['Mul_A/D','GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Hotel','Tour_Notes','Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','AV','Arr_Cold_Towel','ABW','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dpt_Infant_Seats','Dpt_Child_Seats','Dpt_Booster_Seats','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
+    $reservationCols = ['Mul_A/D','GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR',
+        'Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Hotel','Tour_Notes',
+        'Reps','Payment_Type'];
+
+    if ($_REQUEST['sect']=='fsft') {
+    array_push($reservationCols, 'Guest_Title', 'Guest_First_Name', 'Guest_Last_Name');
+    }
+    array_push($reservationCols,
+    'Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff',
+        'Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','AV','Arr_Cold_Towel','ABW','Arr_Lugguage_Vehicle',
+        'Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms',
+        'Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle',
+        'Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dpt_Infant_Seats','Dpt_Child_Seats','Dpt_Booster_Seats','Dept_Voucher',
+        'Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes');
     $guestCols=['Guest_Title','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Teen_Age','Child_Age','Inf_Age','Price','Guest_id'];
 
     /*if ($_REQUEST['sect']=='fsft')
@@ -533,7 +545,7 @@ if(isset($TotalRows) and $TotalRows > 0){
 
     $countKeys = [];
    /* echo '<pre>';
-    print_r($resultData);
+    print_r($reservationCols);
     exit;*/
     foreach($resultData as $key=>$data){ 
           //  print_r($data);
@@ -562,7 +574,7 @@ if(isset($TotalRows) and $TotalRows > 0){
                     }
                 }
         } else {
-            if(isset($data['Guest_id']) and !empty($data['Guest_id']) and $_REQUEST['sect']!='fsft')
+            if(isset($data['Guest_id']) and !empty($data['Guest_id']))
             {
                 array_push($guestIds, $data['Guest_id']);
                 // here code start to show main reservation twice

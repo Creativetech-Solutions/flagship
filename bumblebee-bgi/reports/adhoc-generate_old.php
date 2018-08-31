@@ -8,20 +8,23 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $conn = mysqli_connect('localhost','root','chocolate','cocoa_bgi');
 
+$start=0;
+$limit=25;
 
+if(isset($_GET['id']))
+{
+$id=$_GET['id'];
+$start=($id-1)*$limit;
+}
+else {
+    $id=1;
+}
 
-if(isset($_GET['page']))
-    $page = $_GET['page'];
-else 
-    $page = 1;
-
-$offset = ($page*10) - 10;
-
-  
 if(empty($_POST)){ 
 
     if(isset($_SESSION['adhoc_report'])) // check if report setting save in session, than use that
         $_POST = $_SESSION['adhoc_report'];
+
     if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])) { 
     // for edit report , when user click on generated report button
         $result = mysqli_query($conn, "SELECT `setting` FROM bgi_reports WHERE id=".$_REQUEST['report_id']);
@@ -39,8 +42,8 @@ if(empty($_POST)){
         $_SESSION['adhoc_report'] = $_POST;
     }
 
-ini_set('memory_limit', '9999999999');
-ini_set('max_execution_time', 0);
+    ini_set('memory_limit', '9999999999');
+    ini_set('max_execution_time', 0);
     $postItems = [];
    // $reportSettings = [];
     foreach($_POST as $postedItem){
@@ -88,30 +91,38 @@ function selectData($postItems){
     return implode(',', $selectData);
 }
 
-$query = '  FROM ';
 
-if(isset($_REQUEST['search']) && !empty(trim($_REQUEST['search'])) && strlen(trim($_REQUEST['search'])) > 3)
-    // get all results
-    $query .= ' bgi_reservations R';
-else 
-    $query .= '(SELECT * FROM bgi_reservations LIMIT 10 OFFSET '.$offset.') R ';
+
+
+$query = 'SELECT ';
 
 $selectData = selectData($postItems);
+/*echo "<pre>";
+print_r($_REQUEST);
+exit;*/
+if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all') {
 
-if($_REQUEST['sect'] == 'fsft' || $_REQUEST['sect'] == 'all') 
-    $selectData = $selectData.', R.ftnotify as GH';
+    // if(strpos($selectData, '`is_from_gh`'))
+        $selectData = $selectData.', R.ftnotify as GH';
 
-$selectData .= ', R.ref_no_sys as Ref_no_sys';
+}
 
-$query = 'SELECT' . $selectData . $query;
+$query .= $selectData . ', R.ref_no_sys as Ref_no_sys FROM bgi_reservations R';
 
+if(strpos($selectData, '`HL`')){
+    $query .= ' LEFT JOIN bgi_location HL on HL.id_location = R.hotel_id';
+}
 if(strpos($selectData, '`T`')){
     $query .= ' LEFT JOIN bgi_touroperator T on R.tour_operator = T.id';
 }
 
-if(strpos($selectData, 'Client') && strpos($selectData, '`CT`')){
+/*if(strpos($selectData, 'Client') && strpos($selectData, '`CT`')){
     $query .= ' LEFT JOIN bgi_fsft_touroperator CT on R.tour_operator = CT.id';
-}
+}*/
+/*if(strpos($selectData,'`TF`')){
+    $query .= ' LEFT JOIN bgi_fsft_touroperator TF on R.tour_operator = TF.id';
+}*/
+
 // guests
 if(strpos($selectData,'`G`')){
     $query .= ' LEFT JOIN bgi_guest G on R.ref_no_sys = G.ref_no_sys';
@@ -156,7 +167,7 @@ if(strpos($selectData,'`D`') || strpos($selectData, '`flight_time`') || strpos($
     }
 }
 // arrival
-if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($selectData, '`room_type`') || strpos($selectData, 'Arr_Flight') || strpos($selectData, 'Arr_Flight_Class') || strpos($selectData, 'Arr_Driver') || strpos($selectData, 'Arr_Vehicle') || strpos($selectData, 'Arr_Pickup') || strpos($selectData, 'Arr_Dropoff') ||
+if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($selectData, '`room_type`') || strpos($selectData, 'Arr_Flight') || strpos($selectData, 'Class') || strpos($selectData, 'Arr_Driver') || strpos($selectData, 'Arr_Vehicle') || strpos($selectData, 'Arr_Pickup') || strpos($selectData, 'Arr_Dropoff') ||
     strpos($selectData, 'Zone') || strpos($selectData, 'Location_Code') || strpos($selectData, 'Hotel_Arr_Dropoff') || strpos($selectData, 'Arr_Time')){
     $query .= ' LEFT JOIN bgi_arrivals A on R.ref_no_sys = A.ref_no_sys';
 
@@ -191,7 +202,7 @@ if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($sel
         $query .= ' LEFT JOIN bgi_flights FAR on A.arr_flight_no = FAR.id_flight';
     }
 
-    if(strpos($selectData, 'Arr_Flight_Class')){
+    if(strpos($selectData, 'Class')){
         $query .= ' LEFT JOIN bgi_flightclass FCA on A.flight_class = FCA.id';
     }
 
@@ -259,13 +270,12 @@ if(strpos($selectData, '`AH`') || strpos($selectData, 'Additional_Hotel') || str
 
 
 if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){ 
-    $query .= ' WHERE (R.fast_track=1 || R.ftnotify=1) && R.status!=2';
+    $query .= ' WHERE (R.fast_track=1 || R.ftnotify=1) && R.status != 2';
 } elseif(isset($_REQUEST['sect']) && $_REQUEST['sect']=='gh') {
     $_REQUEST['sect'] = 'gh';
-    $query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status!=2';
-} else {
-    $query .= ' WHERE R.status!=2';
+    $query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status != 2';
 }
+else $query .= ' WHERE R.status != 2';
 
 
 if(!isset($_REQUEST['fromDate']) || !isset($_REQUEST['toDate'])){
@@ -285,20 +295,10 @@ if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
     
     $fromDate = $_REQUEST['fromDate'];
     $toDate = $_REQUEST['toDate'];
-    //if($fromDate != $toDate)
-    $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
+
+    if($fromDate != $toDate)
+        $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
 }
-
-if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])){
-    $search = $_REQUEST['search'];
-    $query .= ' && (R.first_name like "%'.$search.'%" || R.last_name like "%'.$search.'%" || R.pnr like "%'.$search.'%" || R.tour_ref_no like "%'.$search.'%" || R.tour_notes like "%'.$search.'%" || R.arr_transport like "%'.$search.'%" || R.dpt_transport like "%'.$search.'%" || R.ref_no_sys like "%'.$search.'%" || R.arr_transport_notes like "%'.$search.'%" || R.arr_hotel_notes like "%'.$search.'%" || R.fast_ref_no_sys like "%'.$search.'%"';
-
-    if(strpos($selectData,'`G`')){
-        $query .= ' || G.first_name like "'.$search.'" || G.last_name like "'.$search.'" || G.email like "'.$search.'" || G.cell like "'.$search.'"';
-    }
-    $query .= ')';
-}
-
 if(strpos($selectData, 'In_House') && strpos($selectData, 'Departed')){
         $query .= ' && (R.status = 5 || R.status = 4)';
 } else {
@@ -308,20 +308,15 @@ if(strpos($selectData, 'In_House') && strpos($selectData, 'Departed')){
     if(strpos($selectData, 'Departed'))
         $query .= ' && R.status = 4';
 }
-
-//$countQuery = 'SELECT R.id  GROUP BY R.id';
 $query .= ' ORDER BY R.id';
 
-//echo $query; exit;
-
-$totalRecords = mysqli_fetch_row(mysqli_query($conn,'SELECT COUNT(id) FROM bgi_reservations'));
-if(isset($totalRecords[0]))
-    $totalRecords = $totalRecords[0];
-
+/*echo "<pre>";
+print_r($query);
+exit;*/
 $queryResource = mysqli_query($conn,$query);
-
-
-
+/*echo "<pre>";
+print_r($queryResource);
+exit;*/
 if(!empty($queryResource)){
     $TotalRows = mysqli_num_rows($queryResource);
 }
@@ -329,19 +324,21 @@ if(isset($TotalRows) and $TotalRows > 0){
     // output data of each row
     $resultData = [];
     $allReps = [];
-  
+    /*echo "<pre>";
+         print_r($queryResource);
+         exit;*/
     while($row = mysqli_fetch_assoc($queryResource)) {
-      /*  if(isset($row['Child'])){
+       /* if(isset($row['Child'])){
             $child =$row['Child'];
             unset($row['Child']);
         }
         else $child = '-';
-        /*    if(isset($row['Teen'])){
+            if(isset($row['Teen'])){
             $teen = $row['Teen'];
             unset($row['Teen']);
         }
-        else $teen = '-';*/
-        /*if(isset($row['Infant'])){
+        else $teen = '-';
+        if(isset($row['Infant'])){
             $infant = $row['Infant'];
             unset($row['Infant']);
         }
@@ -352,13 +349,15 @@ if(isset($TotalRows) and $TotalRows > 0){
         }
         else $adult = '-';
         if($adult!='-'|| $child!='-'||$infant!='-'){
-             $row['A_C_I'] = $adult.' + '.$child.' + '.$infant;
+             $row['A_C_I'] = $adult.' / '.$child.' / '.$infant;
         } else {
+            
         }*/
 
+        // unset($row['A_C_I']);
         if(isset($row['A_C_I']))
             unset($row['A_C_I']);
-
+        
         if(isset($row['Payment_Type'])){
             $paymentType = $row['Payment_Type'];
             if($paymentType=='0') 
@@ -373,14 +372,16 @@ if(isset($TotalRows) and $TotalRows > 0){
                     }
             }
         }
-        $ref_no_sys = $row['Ref_no_sys'];
-        $innerQuery = mysqli_query($conn, "SELECT COUNT(id) FROM bgi_departures WHERE ref_no_sys = '$ref_no_sys'");
-        $innerQuery = mysqli_fetch_row($innerQuery);
-        if($innerQuery[0] > 1){
-            $row['Mul_A/D'] = "Y";
-        }else{
-            $row['Mul_A/D'] = "N";
-        }
+        //Check multiple arrivals and departures
+
+            $ref_no_sys = $row['Ref_no_sys'];
+            $innerQuery = mysqli_query($conn, "SELECT COUNT(id) FROM bgi_departures WHERE ref_no_sys = '$ref_no_sys'");
+            $innerQuery = mysqli_fetch_row($innerQuery);
+          if($innerQuery[0] > 1){
+              $row['Mul_A/D'] = "Y";
+          }else{
+              $row['Mul_A/D'] = "N";
+          }
         $row = array('Mul_A/D'=>$row['Mul_A/D']) + $row;
 
         // check for arrival service only  
@@ -411,11 +412,14 @@ if(isset($TotalRows) and $TotalRows > 0){
             else 
                 $row['Dep_Fast_Track'] = 'N';
         }
-
-        // check reps 
-        if(isset($row['Reps']))
-            $row['Reps'] = json_decode($row['Reps'], true); 
-       
+        // check reps
+        if(isset($row['Reps'])) {
+            $id = $row['Reps'];
+            $query = "SELECT name FROM bgi_reps WHERE id_rep = $id";
+            $query = mysqli_query($conn, $query);
+            $record = mysqli_fetch_array($query);
+            $row['Reps'] = $record['name'];
+        }
         
         if(isset($row['Reps']) && is_array($row['Reps']) && !empty($row['Reps'])){
             $ids = $row['Reps'];
@@ -459,9 +463,10 @@ if(isset($TotalRows) and $TotalRows > 0){
             if($row['GH'] == 1)
                 $row['GH'] = 'Y';
             else $row['GH'] = 'N';
-           if($_REQUEST['sect'] == 'fsft')
-            $row = array('GH'=>$row['GH']) + $row;
+            if($_REQUEST['sect'] == 'fsft')
+                $row = array('GH'=>$row['GH']) + $row;
         }
+
 
         //added by fahad 30-8-17
         if(strpos($selectData,'FROM_GH')){
@@ -500,46 +505,44 @@ if(isset($TotalRows) and $TotalRows > 0){
                 else $row['Type'] = 'GH';
             }
         }
-            unset($row['GH']);
+
+        if(isset($row['GH']))
+            unset($row['GH']);        
 
         if(isset($row['In_House']))
             unset($row['In_House']);
 
         if(isset($row['Departed']))
             unset($row['Departed']);
+
+
+
         $resultData[] = $row;
 
     }
-
-    /*echo "<pre>";
-    print_r($resultData);
-    exit;*/
 
     $rIds = [];
     $guestIds = [];
     $testArray = [];
     // here wo make the array of reservation and guest columns, that will use later to duplicte the main reservation
-    $reservationCols = ['Mul_A/D','GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell',
-        'PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Tour_Notes',
-        'Reps','Payment_Type','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time',
-        'Arr_Flight_Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type',
-        'Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','Arr_Vouchers','Arr_Cold_Towel','Arr_Bottled_Water',
-        'Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date',
-        'Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track',
-        'Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff',
-        'Dept_Transport_Notes','Dept_Jet_Center','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
+    $reservationCols = ['Mul_A/D','GH','Id','FROM_GH','Type','Title_Name','First_Name','Last_Name','Guest_Email','Guest_Cell','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','Hotel','Tour_Notes','Reps','Payment_Type','Guest_Title','Guest_First_Name', 'Guest_Last_Name','Arr_Date','Arr_Fast_Track','Arr_Flight','Arr_Time','Class','Arr_Transport','Arr_Driver','Arr_Vehicle','Arr_and_Transport_Notes','Arr_Pickup','Arr_Dropoff','Arr_Rep_Type','Additional_Requirements','Arr_Infant_Seats','Arr_Child_Seats','Arr_Booster_Seats','AV','Arr_Cold_Towel','ABW','Arr_Lugguage_Vehicle','Arr_Excursion_Name','Arr_Excursion_Date','Arr_Excursion_Pickup','Arr_Excursion_Confirm_By','Arr_Confirm_Date','Arr_Excursion_Guests','Arr_Room_Type','Arr_No_of_Rooms','Arr_Room','Arr_Room_Last_Name','Arr_Hotel_Notes','Dept_Date','Dep_Fast_Track','Dept_Flight_No','Dept_Time','Dept_Flight_Class','Dept_Transport','Dept_Driver','Dept_Vehicle','Dept_Pickup','Dept_Pickup_Time','Dept_Dropoff','Dept_Transport_Notes','Dept_Jet_Center','Dpt_Infant_Seats','Dpt_Child_Seats','Dpt_Booster_Seats','Dept_Voucher','Dept_Cold_Towel','Dept_Bottled_Water','Accounting_Notes'];
+    $guestCols=['Guest_Title','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Teen_Age','Child_Age','Inf_Age','Price','Guest_id'];
 
-    $guestCols=['Guest_Title_Name','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Teen_Age','Guest_Child_Age','Guest_Infant_Age','Price','Guest_id'];
+    /*if ($_REQUEST['sect']=='fsft')
+        $reservationCols = $guestCols = [];*/
 
     $countKeys = [];
-    //echo '<pre>';
+   /* echo '<pre>';
+    print_r($resultData);
+    exit;*/
     foreach($resultData as $key=>$data){ 
-        //  print_r($data);
+          //  print_r($data);
         $tempRow = $data;
         $newKey = $data['Id'];
         $currentKeys = array_keys($data);
         // make new $testarray, with unique main keys by joining guest_id and reservationid
-        if(isset($data['Guest_id']) && !empty($data['Guest_id'])) $newKey .= $newKey.$data['Guest_id'];
+        if(isset($data['Guest_id']) && !empty($data['Guest_id'])) 
+            $newKey .= $newKey.'_'.$data['Guest_id'];
 
         if(in_array($data['Id'], $rIds) && 
             (!isset($data['Guest_id']) || in_array($data['Guest_id'], $guestIds)) ) { 
@@ -578,9 +581,9 @@ if(isset($TotalRows) and $TotalRows > 0){
             $testArray[$newKey] = $data; 
         }
     }
-        //  exit;
+  //  exit;
 
-        /* here code start to get all all sub indexes of $testarray */
+    /* here code start to get all all sub indexes of $testarray */
     $allIndexes = [];
     foreach($testArray as $key=>$row){
         if(isset($testArray[$key]['Guest_id'])) {
@@ -598,12 +601,13 @@ if(isset($TotalRows) and $TotalRows > 0){
     }
 
 
-    
+
 
     /* here as every main index in testarray has different variable subindexes, that create issue in datatable,
         so here we make equal number of subindexes for each main index
     */
     $dataArray = [];
+
     foreach($testArray as $key=>$row){
         foreach($allIndexes as $index){
             if(isset($testArray[$key][$index])) 
@@ -623,7 +627,9 @@ if(isset($TotalRows) and $TotalRows > 0){
         },$allIndexes);
     } 
 
-}  
+}  else{
+    echo 'No Record Found';
+}
 mysqli_close($conn);
 
 
